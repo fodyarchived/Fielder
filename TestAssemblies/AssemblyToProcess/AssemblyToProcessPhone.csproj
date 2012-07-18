@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="ClassWithFields.cs" />
     <Compile Include="ClassWithNullable.cs" />
+    <Compile Include="StructWithFields.cs" />
   </ItemGroup>
   <Import Project="$(SolutionDir)\Tools\SilverlightForPhoneV4.0\Microsoft.Silverlight.WindowsPhone.Overrides.targets" />
   <Import Project="$(SolutionDir)\Tools\SilverlightForPhoneV4.0\Microsoft.Silverlight.CSharp.targets" />

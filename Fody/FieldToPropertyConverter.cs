@@ -99,6 +99,18 @@ public class FieldToPropertyConverter
     {
         foreach (var type in moduleWeaver.ModuleDefinition.GetAllTypeDefinitions())
         {
+            if (type.IsInterface)
+            {
+                continue;
+            }
+            if (type.IsValueType)
+            {
+                continue;
+            }
+            if (type.IsEnum)
+            {
+                continue;
+            }
             Process(type);
         }
     }

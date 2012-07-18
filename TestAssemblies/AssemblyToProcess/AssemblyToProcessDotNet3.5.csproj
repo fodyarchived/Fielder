@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="ClassWithFields.cs" />
     <Compile Include="ClassWithNullable.cs" />
+    <Compile Include="StructWithFields.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

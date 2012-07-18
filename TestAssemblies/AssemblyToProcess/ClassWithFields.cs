@@ -1,4 +1,4 @@
 ﻿public class ClassWithFields 
 {
-    public string Property1;
+    public string Member;
 }

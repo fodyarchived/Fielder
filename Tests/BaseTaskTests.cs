@@ -28,12 +28,19 @@ public abstract class BaseTaskTests
 
 
     [Test]
-    public void WithFields()
+    public void ClassWithFields()
     {
         var instance = assembly.GetInstance("ClassWithFields");
 
         Type condition = instance.GetType();
-        Assert.IsNotNull(condition.GetProperty("Property1"));
+        Assert.IsNotNull(condition.GetProperty("Member"));
+    }
+
+    [Test]
+    public void StructWithFields()
+    {
+        var type = assembly.GetType("StructWithFields");
+        Assert.IsNotNull(type.GetField("Member"));
     }
 
 
