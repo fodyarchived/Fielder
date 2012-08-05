@@ -7,20 +7,20 @@ using Mono.Collections.Generic;
 
 public class FieldToPropertyForwarder
 {
-    ModuleWeaver moduleWeaver;
     MsCoreReferenceFinder msCoreReferenceFinder;
+    List<TypeDefinition> allTypes;
     Dictionary<FieldDefinition, PropertyDefinition> forwardedFields;
 
-    public FieldToPropertyForwarder(ModuleWeaver moduleWeaver, FieldToPropertyConverter fieldToPropertyConverter, MsCoreReferenceFinder msCoreReferenceFinder)
+    public FieldToPropertyForwarder(FieldToPropertyConverter fieldToPropertyConverter, MsCoreReferenceFinder msCoreReferenceFinder, List<TypeDefinition> allTypes)
     {
-        this.moduleWeaver = moduleWeaver;
         this.msCoreReferenceFinder = msCoreReferenceFinder;
+        this.allTypes = allTypes;
         forwardedFields = fieldToPropertyConverter.ForwardedFields;
     }
 
     public void Execute()
     {
-        foreach (var type in moduleWeaver.ModuleDefinition.GetAllTypeDefinitions())
+        foreach (var type in allTypes)
         {
             if (type.IsInterface)
             {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Mono.Cecil;
 
 public class ModuleWeaver
@@ -17,9 +18,10 @@ public class ModuleWeaver
     {
         var msCoreReferenceFinder = new MsCoreReferenceFinder(this, ModuleDefinition.AssemblyResolver);
         msCoreReferenceFinder.Execute();
-        var fieldToPropertyConverter = new FieldToPropertyConverter(this, msCoreReferenceFinder, ModuleDefinition.TypeSystem);
+        var allTypes = ModuleDefinition.GetTypes().ToList();
+        var fieldToPropertyConverter = new FieldToPropertyConverter(this, msCoreReferenceFinder, ModuleDefinition.TypeSystem, allTypes);
         fieldToPropertyConverter.Execute();
-        var fieldToPropertyForwarder = new FieldToPropertyForwarder(this, fieldToPropertyConverter, msCoreReferenceFinder);
+        var fieldToPropertyForwarder = new FieldToPropertyForwarder(fieldToPropertyConverter, msCoreReferenceFinder, allTypes);
         fieldToPropertyForwarder.Execute();
 
     }

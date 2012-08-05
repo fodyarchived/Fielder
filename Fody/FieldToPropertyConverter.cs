@@ -8,15 +8,17 @@ public class FieldToPropertyConverter
 
     MsCoreReferenceFinder msCoreReferenceFinder;
     TypeSystem typeSystem;
+    readonly List<TypeDefinition> allTypes;
     public Dictionary<FieldDefinition, PropertyDefinition> ForwardedFields;
     ModuleWeaver moduleWeaver;
 
-    public FieldToPropertyConverter(ModuleWeaver moduleWeaver, MsCoreReferenceFinder msCoreReferenceFinder, TypeSystem typeSystem)
+    public FieldToPropertyConverter(ModuleWeaver moduleWeaver, MsCoreReferenceFinder msCoreReferenceFinder, TypeSystem typeSystem, List<TypeDefinition>  allTypes)
     {
         ForwardedFields = new Dictionary<FieldDefinition, PropertyDefinition>();
         this.moduleWeaver = moduleWeaver;
         this.msCoreReferenceFinder = msCoreReferenceFinder;
         this.typeSystem = typeSystem;
+        this.allTypes = allTypes;
     }
 
     void Process(TypeDefinition typeDefinition)
@@ -97,7 +99,7 @@ public class FieldToPropertyConverter
 
     public void Execute()
     {
-        foreach (var type in moduleWeaver.ModuleDefinition.GetAllTypeDefinitions())
+        foreach (var type in allTypes)
         {
             if (type.IsInterface)
             {
