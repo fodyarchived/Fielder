@@ -42,8 +42,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClassWithFields.cs" />
+    <Compile Include="ClassWithField.cs" />
     <Compile Include="ClassWithNullable.cs" />
+    <Compile Include="ClassWithReadOnlyField.cs" />
     <Compile Include="StructWithFields.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

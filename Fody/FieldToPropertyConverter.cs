@@ -84,8 +84,18 @@ public class FieldToPropertyConverter
     }
 
     MethodDefinition GetSet(FieldDefinition field, string name)
-    {
-        var set = new MethodDefinition("set_" + name, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, typeSystem.Void);
+	{
+		MethodAttributes methodAttributes;
+	    if (field.Attributes.HasFlag(FieldAttributes.InitOnly))
+		{
+			methodAttributes = MethodAttributes.Private | MethodAttributes.SpecialName | MethodAttributes.HideBySig;
+			field.Attributes = field.Attributes ^ FieldAttributes.InitOnly;
+		}
+	    else
+	    {
+		    methodAttributes = MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig;
+	    }
+	    var set = new MethodDefinition("set_" + name, methodAttributes, typeSystem.Void);
         var instructions = set.Body.Instructions;
         instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
         instructions.Add(Instruction.Create(OpCodes.Ldarg_1));

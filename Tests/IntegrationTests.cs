@@ -34,12 +34,24 @@ public class IntegrationTests
 
 
     [Test]
-    public void ClassWithFields()
+    public void ClassWithField()
     {
-        var instance = assembly.GetInstance("ClassWithFields");
+        var instance = assembly.GetInstance("ClassWithField");
 
-        Type condition = instance.GetType();
-        Assert.IsNotNull(condition.GetProperty("Member"));
+		Type type = instance.GetType();
+		Assert.IsNotNull(type.GetProperty("Member"));
+		Assert.AreEqual("InitialValue", instance.Member);
+    }
+
+    [Test]
+	public void ClassWithReadOnlyField()
+    {
+		var instance = assembly.GetInstance("ClassWithReadOnlyField");
+
+        Type type = instance.GetType();
+        Assert.IsNotNull(type.GetProperty("Member"));
+		Assert.AreEqual("InitialValue", instance.Member);
+
     }
 
     [Test]
