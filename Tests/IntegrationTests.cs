@@ -44,6 +44,16 @@ public class IntegrationTests
     }
 
     [Test]
+    public void ClassWithFieldInherit()
+    {
+        var instance = assembly.GetInstance("ClassWithFieldInherit");
+
+		Type type = instance.GetType();
+		Assert.IsNotNull(type.GetProperty("Member"));
+		Assert.AreEqual("Foo", instance.Member);
+    }
+
+    [Test]
 	public void ClassWithReadOnlyField()
     {
 		var instance = assembly.GetInstance("ClassWithReadOnlyField");
@@ -53,6 +63,17 @@ public class IntegrationTests
 		Assert.AreEqual("InitialValue", instance.Member);
 
     }
+    [Test]
+    public void ClassWithReadOnlyFieldInherit()
+    {
+        var instance = assembly.GetInstance("ClassWithReadOnlyFieldInherit");
+
+        Type type = instance.GetType();
+        Assert.IsNotNull(type.GetProperty("Member"));
+		Assert.AreEqual("InitialValue", instance.Member);
+
+    }
+    
     [Test]
     public void ClassWithConstField()
     {

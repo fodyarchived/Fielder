@@ -8,44 +8,21 @@ using Mono.Collections.Generic;
 public class FieldToPropertyForwarder
 {
     MsCoreReferenceFinder msCoreReferenceFinder;
-    List<TypeDefinition> allTypes;
-    Dictionary<FieldDefinition, PropertyDefinition> forwardedFields;
+    FieldToPropertyFinder fieldToPropertyFinder;
+    Dictionary<FieldDefinition, ForwardedField> forwardedFields;
 
-    public FieldToPropertyForwarder(FieldToPropertyConverter fieldToPropertyConverter, MsCoreReferenceFinder msCoreReferenceFinder, List<TypeDefinition> allTypes)
+    public FieldToPropertyForwarder(FieldToPropertyConverter fieldToPropertyConverter, MsCoreReferenceFinder msCoreReferenceFinder, FieldToPropertyFinder fieldToPropertyFinder)
     {
         this.msCoreReferenceFinder = msCoreReferenceFinder;
-        this.allTypes = allTypes;
+        this.fieldToPropertyFinder = fieldToPropertyFinder;
         forwardedFields = fieldToPropertyConverter.ForwardedFields;
     }
 
     public void Execute()
     {
-        foreach (var type in allTypes)
+        foreach (var methodDefinition in fieldToPropertyFinder.MethodsToProcess)
         {
-            if (type.IsInterface)
-            {
-                continue;
-            }
-            if (type.IsEnum)
-            {
-                continue;
-            }
-            foreach (var method in type.Methods)
-            {
-                if (method.IsGetter || method.IsSetter)
-                {
-                    continue;
-                }
-                Replace(method);
-            }
-            foreach (var property in type.Properties)
-            {
-                if (!forwardedFields.ContainsValue(property))
-                {
-                    Replace(property.GetMethod);
-                    Replace(property.SetMethod);
-                }
-            }
+            Replace(methodDefinition);
         }
     }
 
@@ -74,24 +51,25 @@ public class FieldToPropertyForwarder
             {
                 if (instruction.OpCode == OpCodes.Ldfld)
                 {
-                    PropertyDefinition propertyDefinition;
-                    if (forwardedFields.TryGetValue(fieldDefinition, out propertyDefinition))
+                    ForwardedField forwardedField;
+                    if (forwardedFields.TryGetValue(fieldDefinition, out forwardedField))
                     {
                         instruction.OpCode = OpCodes.Callvirt;
-                        instruction.Operand = propertyDefinition.GetMethod;
+                        instruction.Operand = forwardedField.Get;
                     }
+                    continue;
                 }
                 if (instruction.OpCode == OpCodes.Ldflda)
                 {
-                    PropertyDefinition propertyDefinition;
-                    if (forwardedFields.TryGetValue(fieldDefinition, out propertyDefinition))
+                    ForwardedField forwardedField;
+                    if (forwardedFields.TryGetValue(fieldDefinition, out forwardedField))
                     {
                         methodDefinition.Body.InitLocals = true;
-                        var variableDefinition = new VariableDefinition(propertyDefinition.PropertyType);
+                        var variableDefinition = new VariableDefinition(forwardedField.FieldType);
                         methodDefinition.Body.Variables.Add(variableDefinition);
 
                         instruction.OpCode = OpCodes.Callvirt;
-                        instruction.Operand = propertyDefinition.GetMethod;
+                        instruction.Operand = forwardedField.Get;
                         var localCopy = instruction;
                         actions.Add(collection =>
                                         {
@@ -100,21 +78,33 @@ public class FieldToPropertyForwarder
                                             collection.Insert(indexOf + 1, Instruction.Create(OpCodes.Ldloca, variableDefinition));
                                         });
                     }
+                    continue;
                 }
 
                 if (instruction.OpCode == OpCodes.Ldtoken)
                 {
                     actions.Add(ProcessLdToken(instruction, fieldDefinition));
+
+                    continue;
                 }
 
                 if (instruction.OpCode == OpCodes.Stfld)
                 {
-                    PropertyDefinition propertyDefinition;
-                    if (forwardedFields.TryGetValue(fieldDefinition, out propertyDefinition))
+                    ForwardedField forwardedField;
+                    if (forwardedFields.TryGetValue(fieldDefinition, out forwardedField))
                     {
+                        if (forwardedField.IsReadOnly && forwardedField.DeclaringType == methodDefinition.DeclaringType)
+                        {
+                            continue;
+                        }
+                        if (forwardedField.DeclaringType == methodDefinition.DeclaringType)
+                        {
+                            continue;
+                        }
                         instruction.OpCode = OpCodes.Callvirt;
-                        instruction.Operand = propertyDefinition.SetMethod;
+                        instruction.Operand = forwardedField.Set;
                     }
+                    continue;
                 }
             }
         }
@@ -127,13 +117,13 @@ public class FieldToPropertyForwarder
 
     Action<Collection<Instruction>> ProcessLdToken(Instruction instruction, FieldDefinition fieldDefinition)
     {
-        PropertyDefinition propertyDefinition;
-        if (!forwardedFields.TryGetValue(fieldDefinition, out propertyDefinition))
+        ForwardedField forwardedField;
+        if (!forwardedFields.TryGetValue(fieldDefinition, out forwardedField))
         {
             return collection => { };
         }
 
-        instruction.Operand = propertyDefinition.GetMethod;
+        instruction.Operand = forwardedField.Get;
         var next = instruction.Next;
         if (next == null)
         {

@@ -44,8 +44,10 @@
   <ItemGroup>
     <Compile Include="ClassWithConstField.cs" />
     <Compile Include="ClassWithField.cs" />
+    <Compile Include="ClassWithFieldInherit.cs" />
     <Compile Include="ClassWithNullable.cs" />
     <Compile Include="ClassWithReadOnlyField.cs" />
+    <Compile Include="ClassWithReadOnlyFieldInherit.cs" />
     <Compile Include="StructWithFields.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -8,13 +8,16 @@ public class FieldToPropertyConverter
 
     MsCoreReferenceFinder msCoreReferenceFinder;
     TypeSystem typeSystem;
-    readonly List<TypeDefinition> allTypes;
-    public Dictionary<FieldDefinition, PropertyDefinition> ForwardedFields;
+    List<TypeDefinition> allTypes;
+
+    public Dictionary<FieldDefinition, ForwardedField> ForwardedFields =
+        new Dictionary<FieldDefinition, ForwardedField>();
+
     ModuleWeaver moduleWeaver;
 
-    public FieldToPropertyConverter(ModuleWeaver moduleWeaver, MsCoreReferenceFinder msCoreReferenceFinder, TypeSystem typeSystem, List<TypeDefinition>  allTypes)
+    public FieldToPropertyConverter(ModuleWeaver moduleWeaver, MsCoreReferenceFinder msCoreReferenceFinder,
+                                    TypeSystem typeSystem, List<TypeDefinition> allTypes)
     {
-        ForwardedFields = new Dictionary<FieldDefinition, PropertyDefinition>();
         this.moduleWeaver = moduleWeaver;
         this.msCoreReferenceFinder = msCoreReferenceFinder;
         this.typeSystem = typeSystem;
@@ -38,7 +41,10 @@ public class FieldToPropertyConverter
         }
         if (typeDefinition.HasGenericParameters)
         {
-            var message = string.Format("Skipped public field '{0}.{1}' because generic types are not currently supported. You should make this a public property instead.", typeDefinition.Name, field.Name);
+            var message =
+                string.Format(
+                    "Skipped public field '{0}.{1}' because generic types are not currently supported. You should make this a public property instead.",
+                    typeDefinition.Name, field.Name);
             moduleWeaver.LogWarning(message);
             return;
         }
@@ -49,25 +55,41 @@ public class FieldToPropertyConverter
         var get = GetGet(field, name);
         typeDefinition.Methods.Add(get);
 
-        var set = GetSet(field, name);
-        typeDefinition.Methods.Add(set);
+        var forwardedField = new ForwardedField
+            {
+                Get = get,
+                FieldType = field.FieldType,
+                DeclaringType = field.DeclaringType,
+            };
 
         var propertyDefinition = new PropertyDefinition(name, PropertyAttributes.None, field.FieldType)
-                                     {
-                                         GetMethod = get,
-                                         SetMethod = set
-                                     };
+            {
+                GetMethod = get
+            };
+
+        var isReadOnly = field.Attributes.HasFlag(FieldAttributes.InitOnly);
+        if (!isReadOnly)
+        {
+            var set = GetSet(field, name);
+            forwardedField.Set = set;
+            typeDefinition.Methods.Add(set);
+            propertyDefinition.SetMethod = set;
+        }
+        forwardedField.IsReadOnly = isReadOnly;
         foreach (var customAttribute in field.CustomAttributes)
         {
             propertyDefinition.CustomAttributes.Add(customAttribute);
         }
         typeDefinition.Properties.Add(propertyDefinition);
-        ForwardedFields.Add(field, propertyDefinition);
+
+        ForwardedFields.Add(field, forwardedField);
     }
 
     MethodDefinition GetGet(FieldDefinition field, string name)
     {
-        var get = new MethodDefinition("get_" + name, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, field.FieldType);
+        var get = new MethodDefinition("get_" + name,
+                                       MethodAttributes.Public | MethodAttributes.SpecialName |
+                                       MethodAttributes.HideBySig, field.FieldType);
         var instructions = get.Body.Instructions;
         instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
         instructions.Add(Instruction.Create(OpCodes.Ldfld, field));
@@ -84,18 +106,10 @@ public class FieldToPropertyConverter
     }
 
     MethodDefinition GetSet(FieldDefinition field, string name)
-	{
-		MethodAttributes methodAttributes;
-	    if (field.Attributes.HasFlag(FieldAttributes.InitOnly))
-		{
-			methodAttributes = MethodAttributes.Private | MethodAttributes.SpecialName | MethodAttributes.HideBySig;
-			field.Attributes = field.Attributes ^ FieldAttributes.InitOnly;
-		}
-	    else
-	    {
-		    methodAttributes = MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig;
-	    }
-	    var set = new MethodDefinition("set_" + name, methodAttributes, typeSystem.Void);
+    {
+        var set = new MethodDefinition("set_" + name,
+                                       MethodAttributes.Public | MethodAttributes.SpecialName |
+                                       MethodAttributes.HideBySig, typeSystem.Void);
         var instructions = set.Body.Instructions;
         instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
         instructions.Add(Instruction.Create(OpCodes.Ldarg_1));

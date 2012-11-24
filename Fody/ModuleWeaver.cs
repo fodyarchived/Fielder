@@ -19,9 +19,12 @@ public class ModuleWeaver
         var msCoreReferenceFinder = new MsCoreReferenceFinder(this, ModuleDefinition.AssemblyResolver);
         msCoreReferenceFinder.Execute();
         var allTypes = ModuleDefinition.GetTypes().ToList();
+
+        var fieldToPropertyFinder = new FieldToPropertyFinder(allTypes);
+        fieldToPropertyFinder.Execute();
         var fieldToPropertyConverter = new FieldToPropertyConverter(this, msCoreReferenceFinder, ModuleDefinition.TypeSystem, allTypes);
         fieldToPropertyConverter.Execute();
-        var fieldToPropertyForwarder = new FieldToPropertyForwarder(fieldToPropertyConverter, msCoreReferenceFinder, allTypes);
+        var fieldToPropertyForwarder = new FieldToPropertyForwarder(fieldToPropertyConverter, msCoreReferenceFinder, fieldToPropertyFinder);
         fieldToPropertyForwarder.Execute();
 
     }

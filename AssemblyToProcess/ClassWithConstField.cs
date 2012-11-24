@@ -1,5 +1,12 @@
-﻿public class ClassWithConstField
+﻿using System.Diagnostics;
+
+public class ClassWithConstField
 {
     public const string Member = "InitialValue";
-    public const int Member2 = 4;
+
+
+    public void Method()
+    {
+        Debug.WriteLine(Member);
+    }
 }

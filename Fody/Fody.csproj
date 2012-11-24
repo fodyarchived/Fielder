@@ -60,8 +60,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CecilExtensions.cs" />
+    <Compile Include="FieldToPropertyFinder.cs" />
     <Compile Include="FieldToPropertyConverter.cs" />
     <Compile Include="FieldToPropertyForwarder.cs" />
+    <Compile Include="ForwardedField.cs" />
     <Compile Include="ModuleWeaver.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs" />
     <Compile Include="MsCoreReferenceFinder.cs" />
