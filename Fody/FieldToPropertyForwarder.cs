@@ -97,7 +97,7 @@ public class FieldToPropertyForwarder
                         {
                             continue;
                         }
-                        if (forwardedField.DeclaringType == methodDefinition.DeclaringType)
+                        if (methodDefinition.IsConstructor && forwardedField.DeclaringType == methodDefinition.DeclaringType)
                         {
                             continue;
                         }
