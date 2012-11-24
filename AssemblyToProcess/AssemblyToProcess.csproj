@@ -42,6 +42,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassWithConstField.cs" />
     <Compile Include="ClassWithField.cs" />
     <Compile Include="ClassWithNullable.cs" />
     <Compile Include="ClassWithReadOnlyField.cs" />

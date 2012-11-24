@@ -53,6 +53,17 @@ public class IntegrationTests
 		Assert.AreEqual("InitialValue", instance.Member);
 
     }
+    [Test]
+    public void ClassWithConstField()
+    {
+        var instance = assembly.GetInstance("ClassWithConstField");
+
+        Type type = instance.GetType();
+        var fieldInfo = type.GetField("Member");
+        Assert.IsNotNull(fieldInfo);
+        Assert.AreEqual("InitialValue", fieldInfo.GetValue(null));
+
+    }
 
     [Test]
     public void StructWithFields()
