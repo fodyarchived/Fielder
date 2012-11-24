@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using Mono.Cecil;
 
-public class FieldToPropertyFinder
+public class MethodFinder
 {
     private List<TypeDefinition> allTypes;
     public List<MethodDefinition> MethodsToProcess = new List<MethodDefinition>();
 
-    public FieldToPropertyFinder(List<TypeDefinition> allTypes)
+    public MethodFinder(List<TypeDefinition> allTypes)
     {
         this.allTypes = allTypes;
     }
@@ -25,16 +25,7 @@ public class FieldToPropertyFinder
             }
             foreach (var method in type.Methods)
             {
-                if (method.IsGetter || method.IsSetter)
-                {
-                    continue;
-                }
                 MethodsToProcess.Add(method);
-            }
-            foreach (var property in type.Properties)
-            {
-                MethodsToProcess.Add(property.GetMethod);
-                MethodsToProcess.Add(property.SetMethod);
             }
         }
     }

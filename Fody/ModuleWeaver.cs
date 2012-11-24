@@ -20,7 +20,7 @@ public class ModuleWeaver
         msCoreReferenceFinder.Execute();
         var allTypes = ModuleDefinition.GetTypes().ToList();
 
-        var fieldToPropertyFinder = new FieldToPropertyFinder(allTypes);
+        var fieldToPropertyFinder = new MethodFinder(allTypes);
         fieldToPropertyFinder.Execute();
         var fieldToPropertyConverter = new FieldToPropertyConverter(this, msCoreReferenceFinder, ModuleDefinition.TypeSystem, allTypes);
         fieldToPropertyConverter.Execute();

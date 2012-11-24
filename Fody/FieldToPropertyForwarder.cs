@@ -8,19 +8,19 @@ using Mono.Collections.Generic;
 public class FieldToPropertyForwarder
 {
     MsCoreReferenceFinder msCoreReferenceFinder;
-    FieldToPropertyFinder fieldToPropertyFinder;
+    MethodFinder methodFinder;
     Dictionary<FieldDefinition, ForwardedField> forwardedFields;
 
-    public FieldToPropertyForwarder(FieldToPropertyConverter fieldToPropertyConverter, MsCoreReferenceFinder msCoreReferenceFinder, FieldToPropertyFinder fieldToPropertyFinder)
+    public FieldToPropertyForwarder(FieldToPropertyConverter fieldToPropertyConverter, MsCoreReferenceFinder msCoreReferenceFinder, MethodFinder methodFinder)
     {
         this.msCoreReferenceFinder = msCoreReferenceFinder;
-        this.fieldToPropertyFinder = fieldToPropertyFinder;
+        this.methodFinder = methodFinder;
         forwardedFields = fieldToPropertyConverter.ForwardedFields;
     }
 
     public void Execute()
     {
-        foreach (var methodDefinition in fieldToPropertyFinder.MethodsToProcess)
+        foreach (var methodDefinition in methodFinder.MethodsToProcess)
         {
             Replace(methodDefinition);
         }
@@ -93,7 +93,7 @@ public class FieldToPropertyForwarder
                     ForwardedField forwardedField;
                     if (forwardedFields.TryGetValue(fieldDefinition, out forwardedField))
                     {
-                        if (forwardedField.IsReadOnly && forwardedField.DeclaringType == methodDefinition.DeclaringType)
+                        if (forwardedField.IsReadOnly)
                         {
                             continue;
                         }

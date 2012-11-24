@@ -60,7 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CecilExtensions.cs" />
-    <Compile Include="FieldToPropertyFinder.cs" />
+    <Compile Include="MethodFinder.cs" />
     <Compile Include="FieldToPropertyConverter.cs" />
     <Compile Include="FieldToPropertyForwarder.cs" />
     <Compile Include="ForwardedField.cs" />
