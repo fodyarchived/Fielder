@@ -1,8 +1,8 @@
-## This is an add-in for [Fody](https://github.com/SimonCropp/Fody/) 
+## This is an add-in for [Fody](https://github.com/Fody/Fody/) 
 
 Converts public fields to public properties
 
-[Introduction to Fody](http://github.com/SimonCropp/Fody/wiki/SampleUsage)
+[Introduction to Fody](http://github.com/Fody/Fody/wiki/SampleUsage)
 
 This feature means you can exclude the `{ get; set; }` on your properties and use fields instead.
 
