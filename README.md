@@ -6,7 +6,13 @@ Converts public fields to public properties
 
 This feature means you can exclude the `{ get; set; }` on your properties and use fields instead.
 
-## Nuget package http://nuget.org/packages/Fielder.Fody 
+## Nuget
+ 
+Nuget package http://nuget.org/packages/Fielder.Fody 
+
+To Install from the Nuget Package Manager Console 
+    
+    PM> Install-Package Fielder.Fody
 
 ## How does this work. 
 
