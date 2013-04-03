@@ -8,9 +8,9 @@
     <owners>Simon Cropp</owners>
     <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
     <projectUrl>http://github.com/Fody/Fielder</projectUrl>
+    <iconUrl>https://raw.github.com/Fody/Fielder/master/Icons/package_icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Converts public fields to properties.</description>
-    <summary />
     <language>en-AU</language>
     <tags>Properties, Fields, ILWeaving, Fody, Cecil</tags>
     <dependencies>

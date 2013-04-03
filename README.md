@@ -19,3 +19,7 @@ To Install from the Nuget Package Manager Console
  * For all types find all public instance fields with a capitalised first character
  * Convert all those fields to properties with the same name
  * Find all usages of those fields and point them to the new properties
+
+## Icon
+
+<a href="http://thenounproject.com/noun/cow/#icon-No5849" target="_blank">Cow</a> designed by <a href="http://thenounproject.com/yxorama" target="_blank">Anuar Zhumaev</a> from The Noun Project
