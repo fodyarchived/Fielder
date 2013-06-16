@@ -1,5 +1,7 @@
 ## This is an add-in for [Fody](https://github.com/Fody/Fody/) 
 
+![Icon](https://raw.github.com/Fody/Fielder/master/Icons/package_icon.png)
+
 Converts public fields to public properties
 
 [Introduction to Fody](http://github.com/Fody/Fody/wiki/SampleUsage)
