@@ -9,11 +9,10 @@ public class CheckForErrors
     [Test]
     public void VerifyRefError()
     {
-
         var errors = new List<string>();
         var assemblyPath = Path.GetFullPath(@"..\..\..\AssemblyToProcessWithErrors\bin\Debug\AssemblyToProcessWithErrors.dll");
 #if (!DEBUG)
-        assemblyPath = beforeAssemblyPath.Replace("Debug", "Release");
+        assemblyPath = assemblyPath.Replace("Debug", "Release");
 #endif
 
         var moduleDefinition = ModuleDefinition.ReadModule(assemblyPath);
