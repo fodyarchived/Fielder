@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Linq;
 using Mono.Cecil;
+using Mono.Cecil.Cil;
 
 public class ModuleWeaver
 {
-    public Action<string> LogError { get; set; }
+    public Action<string, SequencePoint> LogErrorPoint;
     public Action<string> LogInfo { get; set; }
     public Action<string> LogWarning { get; set; }
     public ModuleDefinition ModuleDefinition { get; set; }
@@ -12,7 +13,7 @@ public class ModuleWeaver
     public ModuleWeaver()
     {
         LogInfo = s => { };
-        LogError = s => { };
+        LogErrorPoint = (s,p) => { };
         LogWarning = s => { };
     }
 

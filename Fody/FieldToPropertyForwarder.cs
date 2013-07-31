@@ -71,7 +71,7 @@ public class FieldToPropertyForwarder
                     if (instruction.Next.IsRefOrOut())
                     {
                         var format = string.Format("Method '{0}.{1}' uses member '{2}.{3}' as a 'ref' or 'out' parameter. This is not supported by Fielder. Please convert this field to a property manually.", methodDefinition.DeclaringType.Name, methodDefinition.Name, forwardedField.DeclaringType.Name, forwardedField.PropertyDefinition.Name);
-                        moduleWeaver.LogError(format);
+                        moduleWeaver.LogErrorPoint(format, instruction.Next.FindSequencePoint());
                         continue;
                     }
                     methodDefinition.Body.InitLocals = true;

@@ -22,4 +22,16 @@ public static class CecilExtensions
         }
         return false;
     }
+    public static SequencePoint FindSequencePoint(this Instruction instruction)
+    {
+        while (instruction != null)
+        {
+            if (instruction.SequencePoint != null)
+            {
+                return instruction.SequencePoint;
+            }
+            instruction = instruction.Previous;
+        }
+        return null;
+    }
 }
