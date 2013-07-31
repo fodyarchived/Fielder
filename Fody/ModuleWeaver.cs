@@ -4,6 +4,7 @@ using Mono.Cecil;
 
 public class ModuleWeaver
 {
+    public Action<string> LogError { get; set; }
     public Action<string> LogInfo { get; set; }
     public Action<string> LogWarning { get; set; }
     public ModuleDefinition ModuleDefinition { get; set; }
@@ -11,6 +12,7 @@ public class ModuleWeaver
     public ModuleWeaver()
     {
         LogInfo = s => { };
+        LogError = s => { };
         LogWarning = s => { };
     }
 
@@ -24,7 +26,7 @@ public class ModuleWeaver
         fieldToPropertyFinder.Execute();
         var fieldToPropertyConverter = new FieldToPropertyConverter(this, msCoreReferenceFinder, ModuleDefinition.TypeSystem, allTypes);
         fieldToPropertyConverter.Execute();
-        var fieldToPropertyForwarder = new FieldToPropertyForwarder(fieldToPropertyConverter, msCoreReferenceFinder, fieldToPropertyFinder);
+        var fieldToPropertyForwarder = new FieldToPropertyForwarder(this, fieldToPropertyConverter, msCoreReferenceFinder, fieldToPropertyFinder);
         fieldToPropertyForwarder.Execute();
 
     }

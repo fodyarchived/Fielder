@@ -55,17 +55,18 @@ public class FieldToPropertyConverter
         var get = GetGet(field, name);
         typeDefinition.Methods.Add(get);
 
+        var propertyDefinition = new PropertyDefinition(name, PropertyAttributes.None, field.FieldType)
+            {
+                GetMethod = get
+            };
         var forwardedField = new ForwardedField
             {
                 Get = get,
                 FieldType = field.FieldType,
                 DeclaringType = field.DeclaringType,
+                PropertyDefinition = propertyDefinition,
             };
 
-        var propertyDefinition = new PropertyDefinition(name, PropertyAttributes.None, field.FieldType)
-            {
-                GetMethod = get
-            };
 
         var isReadOnly = field.Attributes.HasFlag(FieldAttributes.InitOnly);
         if (!isReadOnly)

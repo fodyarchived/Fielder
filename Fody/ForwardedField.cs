@@ -10,4 +10,5 @@ public class ForwardedField
     public TypeReference FieldType;
 
     public TypeDefinition DeclaringType;
+    public PropertyDefinition PropertyDefinition;
 }

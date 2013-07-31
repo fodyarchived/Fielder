@@ -23,6 +23,8 @@ public static class Verifier
 
         process.WaitForExit(10000);
         var readToEnd = process.StandardOutput.ReadToEnd().Trim();
+
+
         Assert.IsTrue(readToEnd.Contains(string.Format("All Classes and Methods in {0} Verified.", assemblyPath)), readToEnd);
     }
 

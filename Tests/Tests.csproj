@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tests</RootNamespace>
     <AssemblyName>Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,6 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -62,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyExtensions.cs" />
+    <Compile Include="CheckForErrors.cs" />
     <Compile Include="Verifier.cs" />
     <Compile Include="IntegrationTests.cs" />
   </ItemGroup>
@@ -71,6 +74,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AssemblyToProcessWithErrors\AssemblyToProcessWithErrors.csproj">
+      <Project>{46f580ad-7405-45f0-9360-3319c1b07636}</Project>
+      <Name>AssemblyToProcessWithErrors</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AssemblyToProcess\AssemblyToProcess.csproj">
       <Project>{7dec4e2d-f872-434e-a267-0bad65299950}</Project>
       <Name>AssemblyToProcess</Name>

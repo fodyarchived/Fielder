@@ -7,12 +7,14 @@ using Mono.Collections.Generic;
 
 public class FieldToPropertyForwarder
 {
+    ModuleWeaver moduleWeaver;
     MsCoreReferenceFinder msCoreReferenceFinder;
     MethodFinder methodFinder;
     Dictionary<FieldDefinition, ForwardedField> forwardedFields;
 
-    public FieldToPropertyForwarder(FieldToPropertyConverter fieldToPropertyConverter, MsCoreReferenceFinder msCoreReferenceFinder, MethodFinder methodFinder)
+    public FieldToPropertyForwarder(ModuleWeaver moduleWeaver, FieldToPropertyConverter fieldToPropertyConverter, MsCoreReferenceFinder msCoreReferenceFinder, MethodFinder methodFinder)
     {
+        this.moduleWeaver = moduleWeaver;
         this.msCoreReferenceFinder = msCoreReferenceFinder;
         this.methodFinder = methodFinder;
         forwardedFields = fieldToPropertyConverter.ForwardedFields;
@@ -47,65 +49,72 @@ public class FieldToPropertyForwarder
         foreach (var instruction in instructions)
         {
             var fieldDefinition = instruction.Operand as FieldDefinition;
-            if (fieldDefinition != null)
+            if (fieldDefinition == null)
             {
-                if (instruction.OpCode == OpCodes.Ldfld)
+                continue;
+            }
+            if (instruction.OpCode == OpCodes.Ldfld)
+            {
+                ForwardedField forwardedField;
+                if (forwardedFields.TryGetValue(fieldDefinition, out forwardedField))
                 {
-                    ForwardedField forwardedField;
-                    if (forwardedFields.TryGetValue(fieldDefinition, out forwardedField))
+                    instruction.OpCode = OpCodes.Callvirt;
+                    instruction.Operand = forwardedField.Get;
+                }
+                continue;
+            }
+            if (instruction.OpCode == OpCodes.Ldflda)
+            {
+                ForwardedField forwardedField;
+                if (forwardedFields.TryGetValue(fieldDefinition, out forwardedField))
+                {
+                    if (instruction.Next.IsRefOrOut())
                     {
-                        instruction.OpCode = OpCodes.Callvirt;
-                        instruction.Operand = forwardedField.Get;
+                        var format = string.Format("Method '{0}.{1}' uses member '{2}.{3}' as a 'ref' or 'out' parameter. This is not supported by Fielder. Please convert this field to a property manually.", methodDefinition.DeclaringType.Name, methodDefinition.Name, forwardedField.DeclaringType.Name, forwardedField.PropertyDefinition.Name);
+                        moduleWeaver.LogError(format);
+                        continue;
                     }
-                    continue;
-                }
-                if (instruction.OpCode == OpCodes.Ldflda)
-                {
-                    ForwardedField forwardedField;
-                    if (forwardedFields.TryGetValue(fieldDefinition, out forwardedField))
-                    {
-                        methodDefinition.Body.InitLocals = true;
-                        var variableDefinition = new VariableDefinition(forwardedField.FieldType);
-                        methodDefinition.Body.Variables.Add(variableDefinition);
+                    methodDefinition.Body.InitLocals = true;
+                    var variableDefinition = new VariableDefinition(forwardedField.FieldType);
+                    methodDefinition.Body.Variables.Add(variableDefinition);
 
-                        instruction.OpCode = OpCodes.Callvirt;
-                        instruction.Operand = forwardedField.Get;
-                        var localCopy = instruction;
-                        actions.Add(collection =>
-                                        {
-                                            var indexOf = collection.IndexOf(localCopy) + 1;
-                                            collection.Insert(indexOf, Instruction.Create(OpCodes.Stloc, variableDefinition));
-                                            collection.Insert(indexOf + 1, Instruction.Create(OpCodes.Ldloca, variableDefinition));
-                                        });
-                    }
-                    continue;
-                }
-
-                if (instruction.OpCode == OpCodes.Ldtoken)
-                {
-                    actions.Add(ProcessLdToken(instruction, fieldDefinition));
-
-                    continue;
-                }
-
-                if (instruction.OpCode == OpCodes.Stfld)
-                {
-                    ForwardedField forwardedField;
-                    if (forwardedFields.TryGetValue(fieldDefinition, out forwardedField))
-                    {
-                        if (forwardedField.IsReadOnly)
+                    instruction.OpCode = OpCodes.Callvirt;
+                    instruction.Operand = forwardedField.Get;
+                    var localCopy = instruction;
+                    actions.Add(collection =>
                         {
-                            continue;
-                        }
-                        if (methodDefinition.IsConstructor && forwardedField.DeclaringType == methodDefinition.DeclaringType)
-                        {
-                            continue;
-                        }
-                        instruction.OpCode = OpCodes.Callvirt;
-                        instruction.Operand = forwardedField.Set;
-                    }
-                    continue;
+                            var indexOf = collection.IndexOf(localCopy) + 1;
+                            collection.Insert(indexOf, Instruction.Create(OpCodes.Stloc, variableDefinition));
+                            collection.Insert(indexOf + 1, Instruction.Create(OpCodes.Ldloca, variableDefinition));
+                        });
                 }
+                continue;
+            }
+
+            if (instruction.OpCode == OpCodes.Ldtoken)
+            {
+                actions.Add(ProcessLdToken(instruction, fieldDefinition));
+
+                continue;
+            }
+
+            if (instruction.OpCode == OpCodes.Stfld)
+            {
+                ForwardedField forwardedField;
+                if (forwardedFields.TryGetValue(fieldDefinition, out forwardedField))
+                {
+                    if (forwardedField.IsReadOnly)
+                    {
+                        continue;
+                    }
+                    if (methodDefinition.IsConstructor && forwardedField.DeclaringType == methodDefinition.DeclaringType)
+                    {
+                        continue;
+                    }
+                    instruction.OpCode = OpCodes.Callvirt;
+                    instruction.Operand = forwardedField.Set;
+                }
+                continue;
             }
         }
         foreach (var action in actions)

@@ -8,13 +8,11 @@ using NUnit.Framework;
 public class IntegrationTests
 {
     Assembly assembly;
-    string beforeAssemblyPath;
     string afterAssemblyPath;
 
     public IntegrationTests()
     {
-
-        beforeAssemblyPath = Path.GetFullPath(@"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll");
+        var beforeAssemblyPath = Path.GetFullPath(@"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll");
 #if (!DEBUG)
 
         beforeAssemblyPath = beforeAssemblyPath.Replace("Debug", "Release");
@@ -106,3 +104,4 @@ public class IntegrationTests
 #endif
 
 }
+

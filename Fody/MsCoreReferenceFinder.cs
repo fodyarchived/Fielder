@@ -43,9 +43,9 @@ public class MsCoreReferenceFinder
         var systemCoreDefinition = GetSystemCoreDefinition();
 
 
-        var expressionTypeDefiniton = systemCoreDefinition.MainModule.Types.First(x => x.Name == "Expression");
+        var expressionTypeDefinition = systemCoreDefinition.MainModule.Types.First(x => x.Name == "Expression");
         var propertyMethodDefinition =
-            expressionTypeDefiniton.Methods.First(
+            expressionTypeDefinition.Methods.First(
                 x => x.Name == "Property" && x.Parameters.Last().ParameterType.Name == "MethodInfo");
         PropertyReference = module.Import(propertyMethodDefinition);
 
@@ -70,8 +70,8 @@ public class MsCoreReferenceFinder
 
 
         var systemLinqExpressions = assemblyResolver.Resolve("System.Linq.Expressions");
-        var expressionTypeDefiniton = systemLinqExpressions.MainModule.Types.First(x => x.Name == "Expression");
-        var propertyMethodDefinition = expressionTypeDefiniton.Methods.First(x => x.Name == "Property" && x.Parameters.Last().ParameterType.Name == "MethodInfo");
+        var expressionTypeDefinition = systemLinqExpressions.MainModule.Types.First(x => x.Name == "Expression");
+        var propertyMethodDefinition = expressionTypeDefinition.Methods.First(x => x.Name == "Property" && x.Parameters.Last().ParameterType.Name == "MethodInfo");
         PropertyReference = module.Import(propertyMethodDefinition);
 
     }
