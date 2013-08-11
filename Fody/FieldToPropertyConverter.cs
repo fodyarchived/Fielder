@@ -81,6 +81,7 @@ public class FieldToPropertyConverter
         {
             propertyDefinition.CustomAttributes.Add(customAttribute);
         }
+        field.CustomAttributes.Add(new CustomAttribute(msCoreReferenceFinder.CompilerGeneratedReference));
         typeDefinition.Properties.Add(propertyDefinition);
 
         ForwardedFields.Add(field, forwardedField);
@@ -116,7 +117,7 @@ public class FieldToPropertyConverter
         instructions.Add(Instruction.Create(OpCodes.Ldarg_1));
         instructions.Add(Instruction.Create(OpCodes.Stfld, field));
         instructions.Add(Instruction.Create(OpCodes.Ret));
-        set.Parameters.Add(new ParameterDefinition(field.FieldType));
+        set.Parameters.Add(new ParameterDefinition("value", ParameterAttributes.None, field.FieldType));
         set.SemanticsAttributes = MethodSemanticsAttributes.Setter;
         set.CustomAttributes.Add(new CustomAttribute(msCoreReferenceFinder.CompilerGeneratedReference));
         return set;
