@@ -3,7 +3,7 @@ using Mono.Cecil;
 
 public class MethodFinder
 {
-    private List<TypeDefinition> allTypes;
+    List<TypeDefinition> allTypes;
     public List<MethodDefinition> MethodsToProcess = new List<MethodDefinition>();
 
     public MethodFinder(List<TypeDefinition> allTypes)

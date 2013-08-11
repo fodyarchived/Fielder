@@ -12,7 +12,7 @@ public class ClassWithReadOnlyField
     public ClassWithReadOnlyField(int foo)
 // ReSharper restore UnusedParameter.Local
     {
-        Member = "sdfsdf";
+        Member = "aString";
         Debug.WriteLine(Member);
     }
 

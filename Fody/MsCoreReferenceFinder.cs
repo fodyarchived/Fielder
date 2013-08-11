@@ -67,8 +67,6 @@ public class MsCoreReferenceFinder
         var methodInfo = systemReflection.MainModule.Types.FirstOrDefault(x => x.Name == "MethodInfo");
         MethodInfoTypeReference = module.Import(methodInfo);
 
-
-
         var systemLinqExpressions = assemblyResolver.Resolve("System.Linq.Expressions");
         var expressionTypeDefinition = systemLinqExpressions.MainModule.Types.First(x => x.Name == "Expression");
         var propertyMethodDefinition = expressionTypeDefinition.Methods.First(x => x.Name == "Property" && x.Parameters.Last().ParameterType.Name == "MethodInfo");
@@ -77,8 +75,6 @@ public class MsCoreReferenceFinder
     }
 
     
-
-
     AssemblyDefinition GetSystemCoreDefinition()
     {
         try

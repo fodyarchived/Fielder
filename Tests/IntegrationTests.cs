@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Mono.Cecil;
 using NUnit.Framework;
 
@@ -42,6 +43,14 @@ public class IntegrationTests
 		Type type = instance.GetType();
 		Assert.IsNotNull(type.GetProperty("Member"));
 		Assert.AreEqual("InitialValue", instance.Member);
+    }
+
+    [Test]
+    public void EnsureCompilerGeneratedOnField()
+    {
+        var type = assembly.GetType("ClassWithField", true);
+        var fieldInfo = type.GetField("<Member>k__BackingField", BindingFlags.NonPublic| BindingFlags.Instance);
+        Assert.IsNotNull(fieldInfo.GetCustomAttribute<CompilerGeneratedAttribute>());
     }
 
     [Test]
