@@ -6,6 +6,7 @@ class ClassUsingRefParam
         MethodWithRef(ref test.Member);
     }
 
+    // ReSharper disable once UnusedParameter.Local
     void MethodWithRef(ref string a)
     {
     }
