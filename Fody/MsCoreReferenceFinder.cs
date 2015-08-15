@@ -32,13 +32,13 @@ public class MsCoreReferenceFinder
         var module = moduleWeaver.ModuleDefinition;
 
         var methodBaseDefinition = msCoreTypes.First(x => x.Name == "MethodBase");
-        GetMethodFromHandle = module.Import(methodBaseDefinition.Methods.First(x => x.Name == "GetMethodFromHandle"));
+        GetMethodFromHandle = module.ImportReference(methodBaseDefinition.Methods.First(x => x.Name == "GetMethodFromHandle"));
 
         var methodInfo = msCoreTypes.FirstOrDefault(x => x.Name == "MethodInfo");
-        MethodInfoTypeReference = module.Import(methodInfo);
+        MethodInfoTypeReference = module.ImportReference(methodInfo);
 
         var compilerGeneratedDefinition = msCoreTypes.First(x => x.Name == "CompilerGeneratedAttribute");
-        CompilerGeneratedReference = module.Import(compilerGeneratedDefinition.Methods.First(x=>x.IsConstructor));
+        CompilerGeneratedReference = module.ImportReference(compilerGeneratedDefinition.Methods.First(x => x.IsConstructor));
 
         var systemCoreDefinition = GetSystemCoreDefinition();
 
@@ -47,7 +47,7 @@ public class MsCoreReferenceFinder
         var propertyMethodDefinition =
             expressionTypeDefinition.Methods.First(
                 x => x.Name == "Property" && x.Parameters.Last().ParameterType.Name == "MethodInfo");
-        PropertyReference = module.Import(propertyMethodDefinition);
+        PropertyReference = module.ImportReference(propertyMethodDefinition);
 
     }
     public void ExecuteWinRT()
@@ -58,19 +58,19 @@ public class MsCoreReferenceFinder
         var module = moduleWeaver.ModuleDefinition;
 
         var compilerGeneratedDefinition = systemRuntimeTypes.First(x => x.Name == "CompilerGeneratedAttribute");
-        CompilerGeneratedReference = module.Import(compilerGeneratedDefinition.Methods.First(x => x.IsConstructor));
+        CompilerGeneratedReference = module.ImportReference(compilerGeneratedDefinition.Methods.First(x => x.IsConstructor));
         
         var systemReflection = assemblyResolver.Resolve("System.Reflection");
         var methodBaseDefinition = systemReflection.MainModule.Types.First(x => x.Name == "MethodBase");
-        GetMethodFromHandle = module.Import(methodBaseDefinition.Methods.First(x => x.Name == "GetMethodFromHandle"));
+        GetMethodFromHandle = module.ImportReference(methodBaseDefinition.Methods.First(x => x.Name == "GetMethodFromHandle"));
 
         var methodInfo = systemReflection.MainModule.Types.FirstOrDefault(x => x.Name == "MethodInfo");
-        MethodInfoTypeReference = module.Import(methodInfo);
+        MethodInfoTypeReference = module.ImportReference(methodInfo);
 
         var systemLinqExpressions = assemblyResolver.Resolve("System.Linq.Expressions");
         var expressionTypeDefinition = systemLinqExpressions.MainModule.Types.First(x => x.Name == "Expression");
         var propertyMethodDefinition = expressionTypeDefinition.Methods.First(x => x.Name == "Property" && x.Parameters.Last().ParameterType.Name == "MethodInfo");
-        PropertyReference = module.Import(propertyMethodDefinition);
+        PropertyReference = module.ImportReference(propertyMethodDefinition);
 
     }
 
