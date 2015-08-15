@@ -41,7 +41,7 @@
     <None Include="NugetAssets\dotnet.targets">
       <SubType>Designer</SubType>
     </None>
-    <None Include="NugetAssets\Fielder.nuspec">
+    <None Include="NugetAssets\Fielder.Fody.nuspec">
       <SubType>Designer</SubType>
     </None>
     <None Include="NugetAssets\install.ps" />
@@ -91,7 +91,7 @@
     <Delete Files="@(FilesToDelete)" />
     <MakeDir Directories="$(SolutionDir)NuGetBuild" />
     <Copy SourceFiles="$(ProjectDir)NugetAssets\dotnet.targets" DestinationFiles="$(SolutionDir)NuGetBuild\build\dotnet\Fielder.Fody.targets" />
-    <Copy SourceFiles="$(ProjectDir)NugetAssets\Fielder.nuspec" DestinationFolder="$(SolutionDir)NuGetBuild" />
+    <Copy SourceFiles="$(ProjectDir)NugetAssets\Fielder.Fody.nuspec" DestinationFolder="$(SolutionDir)NuGetBuild" />
     <Copy SourceFiles="$(OutputPath)Fielder.Fody.dll" DestinationFolder="$(SolutionDir)NuGetBuild" />
     <Copy SourceFiles="$(ProjectDir)NuGetAssets\Fody_ToBeDeleted.txt" DestinationFolder="$(SolutionDir)NuGetBuild\Content" />
     <Copy SourceFiles="$(ProjectDir)NugetAssets\install.ps" DestinationFiles="$(SolutionDir)NuGetBuild\Tools\install.ps1" />
