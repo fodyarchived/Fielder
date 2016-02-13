@@ -42,14 +42,12 @@ public class FieldToPropertyConverter
         if (typeDefinition.HasGenericParameters)
         {
             var message =
-                string.Format(
-                    "Skipped public field '{0}.{1}' because generic types are not currently supported. You should make this a public property instead.",
-                    typeDefinition.Name, field.Name);
+                $"Skipped public field '{typeDefinition.Name}.{field.Name}' because generic types are not currently supported. You should make this a public property instead.";
             moduleWeaver.LogWarning(message);
             return;
         }
 
-        field.Name = string.Format("<{0}>k__BackingField", name);
+        field.Name = $"<{name}>k__BackingField";
         field.IsPublic = false;
         field.IsPrivate = true;
         var get = GetGet(field, name);

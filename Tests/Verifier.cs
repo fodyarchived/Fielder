@@ -14,7 +14,7 @@ public static class Verifier
         {
             exePath = Environment.ExpandEnvironmentVariables(@"%programfiles(x86)%\Microsoft SDKs\Windows\v8.0A\Bin\NETFX 4.0 Tools\PEVerify.exe");
         }
-        var process = Process.Start(new ProcessStartInfo(exePath, string.Format("\"{0}\" /IGNORE=0x80070002", assemblyPath))
+        var process = Process.Start(new ProcessStartInfo(exePath, $"\"{assemblyPath}\" /IGNORE=0x80070002")
         {
             RedirectStandardOutput = true,
             UseShellExecute = false,
@@ -25,7 +25,7 @@ public static class Verifier
         var readToEnd = process.StandardOutput.ReadToEnd().Trim();
 
 
-        Assert.IsTrue(readToEnd.Contains(string.Format("All Classes and Methods in {0} Verified.", assemblyPath)), readToEnd);
+        Assert.IsTrue(readToEnd.Contains($"All Classes and Methods in {assemblyPath} Verified."), readToEnd);
     }
 
 }
