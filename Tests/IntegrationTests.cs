@@ -10,10 +10,11 @@ public class IntegrationTests
 {
     Assembly assembly;
     string afterAssemblyPath;
+    string beforeAssemblyPath;
 
     public IntegrationTests()
     {
-        var beforeAssemblyPath = Path.GetFullPath(@"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll");
+        beforeAssemblyPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll"));
 #if (!DEBUG)
 
         beforeAssemblyPath = beforeAssemblyPath.Replace("Debug", "Release");
@@ -83,7 +84,7 @@ public class IntegrationTests
 		Assert.AreEqual("InitialValue", instance.Member);
 
     }
-    
+
     [Test]
     public void ClassWithConstField()
     {
@@ -108,7 +109,7 @@ public class IntegrationTests
     [Test]
     public void PeVerify()
     {
-        Verifier.Validate(afterAssemblyPath);
+        Verifier.Verify(beforeAssemblyPath, afterAssemblyPath);
     }
 #endif
 

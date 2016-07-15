@@ -50,6 +50,7 @@ public class MsCoreReferenceFinder
         PropertyReference = module.ImportReference(propertyMethodDefinition);
 
     }
+
     public void ExecuteWinRT()
     {
         var systemRuntime = assemblyResolver.Resolve("System.Runtime");
@@ -59,7 +60,7 @@ public class MsCoreReferenceFinder
 
         var compilerGeneratedDefinition = systemRuntimeTypes.First(x => x.Name == "CompilerGeneratedAttribute");
         CompilerGeneratedReference = module.ImportReference(compilerGeneratedDefinition.Methods.First(x => x.IsConstructor));
-        
+
         var systemReflection = assemblyResolver.Resolve("System.Reflection");
         var methodBaseDefinition = systemReflection.MainModule.Types.First(x => x.Name == "MethodBase");
         GetMethodFromHandle = module.ImportReference(methodBaseDefinition.Methods.First(x => x.Name == "GetMethodFromHandle"));
@@ -71,10 +72,9 @@ public class MsCoreReferenceFinder
         var expressionTypeDefinition = systemLinqExpressions.MainModule.Types.First(x => x.Name == "Expression");
         var propertyMethodDefinition = expressionTypeDefinition.Methods.First(x => x.Name == "Property" && x.Parameters.Last().ParameterType.Name == "MethodInfo");
         PropertyReference = module.ImportReference(propertyMethodDefinition);
-
     }
 
-    
+
     AssemblyDefinition GetSystemCoreDefinition()
     {
         try
