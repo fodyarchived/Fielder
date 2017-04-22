@@ -24,7 +24,7 @@ public class CheckForErrors
         var weavingTask = new ModuleWeaver
                           {
                               ModuleDefinition = moduleDefinition,
-                              LogErrorPoint = (s, p) => errors.Add(s)
+                              LogError = s => errors.Add(s)
                           };
 
         weavingTask.Execute();

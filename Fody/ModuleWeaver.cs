@@ -5,15 +5,15 @@ using Mono.Cecil.Cil;
 
 public class ModuleWeaver
 {
-    public Action<string, SequencePoint> LogErrorPoint;
+    public Action<string> LogError { get; set; }
     public Action<string> LogInfo { get; set; }
     public Action<string> LogWarning { get; set; }
     public ModuleDefinition ModuleDefinition { get; set; }
 
     public ModuleWeaver()
     {
+        LogError = s => { };
         LogInfo = s => { };
-        LogErrorPoint = (s,p) => { };
         LogWarning = s => { };
     }
 

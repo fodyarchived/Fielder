@@ -23,14 +23,16 @@ public class IntegrationTests
         afterAssemblyPath = beforeAssemblyPath.Replace(".dll", "2.dll");
         File.Copy(beforeAssemblyPath, afterAssemblyPath, true);
 
-        var moduleDefinition = ModuleDefinition.ReadModule(afterAssemblyPath);
-        var weavingTask = new ModuleWeaver
+        using (var moduleDefinition = ModuleDefinition.ReadModule(beforeAssemblyPath))
         {
-            ModuleDefinition = moduleDefinition,
-        };
+            var weavingTask = new ModuleWeaver
+            {
+                ModuleDefinition = moduleDefinition,
+            };
 
-        weavingTask.Execute();
-        moduleDefinition.Write(afterAssemblyPath);
+            weavingTask.Execute();
+            moduleDefinition.Write(afterAssemblyPath);
+        }
 
         assembly = Assembly.LoadFile(afterAssemblyPath);
     }
@@ -41,16 +43,16 @@ public class IntegrationTests
     {
         var instance = assembly.GetInstance("ClassWithField");
 
-		Type type = instance.GetType();
-		Assert.IsNotNull(type.GetProperty("Member"));
-		Assert.AreEqual("InitialValue", instance.Member);
+        Type type = instance.GetType();
+        Assert.IsNotNull(type.GetProperty("Member"));
+        Assert.AreEqual("InitialValue", instance.Member);
     }
 
     [Test]
     public void EnsureCompilerGeneratedOnField()
     {
         var type = assembly.GetType("ClassWithField", true);
-        var fieldInfo = type.GetField("<Member>k__BackingField", BindingFlags.NonPublic| BindingFlags.Instance);
+        var fieldInfo = type.GetField("<Member>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
         Assert.IsNotNull(fieldInfo.GetCustomAttribute<CompilerGeneratedAttribute>());
     }
 
@@ -59,21 +61,22 @@ public class IntegrationTests
     {
         var instance = assembly.GetInstance("ClassWithFieldInherit");
 
-		Type type = instance.GetType();
-		Assert.IsNotNull(type.GetProperty("Member"));
-		Assert.AreEqual("Foo", instance.Member);
+        Type type = instance.GetType();
+        Assert.IsNotNull(type.GetProperty("Member"));
+        Assert.AreEqual("Foo", instance.Member);
     }
 
     [Test]
-	public void ClassWithReadOnlyField()
+    public void ClassWithReadOnlyField()
     {
-		var instance = assembly.GetInstance("ClassWithReadOnlyField");
+        var instance = assembly.GetInstance("ClassWithReadOnlyField");
 
         Type type = instance.GetType();
         Assert.IsNotNull(type.GetProperty("Member"));
-		Assert.AreEqual("InitialValue", instance.Member);
+        Assert.AreEqual("InitialValue", instance.Member);
 
     }
+
     [Test]
     public void ClassWithReadOnlyFieldInherit()
     {
@@ -81,8 +84,7 @@ public class IntegrationTests
 
         Type type = instance.GetType();
         Assert.IsNotNull(type.GetProperty("Member"));
-		Assert.AreEqual("InitialValue", instance.Member);
-
+        Assert.AreEqual("InitialValue", instance.Member);
     }
 
     [Test]
@@ -106,12 +108,13 @@ public class IntegrationTests
 
 
 #if(DEBUG)
+
     [Test]
     public void PeVerify()
     {
         Verifier.Verify(beforeAssemblyPath, afterAssemblyPath);
     }
+
 #endif
 
 }
-

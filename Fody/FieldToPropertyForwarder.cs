@@ -28,24 +28,24 @@ public class FieldToPropertyForwarder
         }
     }
 
-    void Replace(MethodDefinition methodDefinition)
+    void Replace(MethodDefinition method)
     {
-        if (methodDefinition == null)
+        if (method == null)
         {
             return;
         }
-        if (methodDefinition.IsAbstract)
+        if (method.IsAbstract)
         {
             return;
         }
         //for delegates
-        if (methodDefinition.Body == null)
+        if (method.Body == null)
         {
             return;
         }
-        methodDefinition.Body.SimplifyMacros();
+        method.Body.SimplifyMacros();
         var actions = new List<Action<Collection<Instruction>>>();
-        var instructions = methodDefinition.Body.Instructions;
+        var instructions = method.Body.Instructions;
         foreach (var instruction in instructions)
         {
             var fieldDefinition = instruction.Operand as FieldDefinition;
@@ -70,13 +70,13 @@ public class FieldToPropertyForwarder
                 {
                     if (instruction.Next.IsRefOrOut())
                     {
-                        var format = $"Method '{methodDefinition.DeclaringType.Name}.{methodDefinition.Name}' uses member '{forwardedField.DeclaringType.Name}.{forwardedField.PropertyDefinition.Name}' as a 'ref' or 'out' parameter. This is not supported by Fielder. Please convert this field to a property manually.";
-                        moduleWeaver.LogErrorPoint(format, instruction.Next.FindSequencePoint());
+                        var format = $"Method '{method.DeclaringType.Name}.{method.Name}' uses member '{forwardedField.DeclaringType.Name}.{forwardedField.PropertyDefinition.Name}' as a 'ref' or 'out' parameter. This is not supported by Fielder. Please convert this field to a property manually.";
+                        moduleWeaver.LogError(format);
                         continue;
                     }
-                    methodDefinition.Body.InitLocals = true;
+                    method.Body.InitLocals = true;
                     var variableDefinition = new VariableDefinition(forwardedField.FieldType);
-                    methodDefinition.Body.Variables.Add(variableDefinition);
+                    method.Body.Variables.Add(variableDefinition);
 
                     instruction.OpCode = OpCodes.Callvirt;
                     instruction.Operand = forwardedField.Get;
@@ -107,7 +107,7 @@ public class FieldToPropertyForwarder
                     {
                         continue;
                     }
-                    if (methodDefinition.IsConstructor && forwardedField.DeclaringType == methodDefinition.DeclaringType)
+                    if (method.IsConstructor && forwardedField.DeclaringType == method.DeclaringType)
                     {
                         continue;
                     }
@@ -121,7 +121,7 @@ public class FieldToPropertyForwarder
         {
             action(instructions);
         }
-        methodDefinition.Body.OptimizeMacros();
+        method.Body.OptimizeMacros();
     }
 
     Action<Collection<Instruction>> ProcessLdToken(Instruction instruction, FieldDefinition fieldDefinition)

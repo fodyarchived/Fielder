@@ -20,7 +20,7 @@ public class MsCoreReferenceFinder
 
     public void Execute()
     {
-        var msCoreLibDefinition = assemblyResolver.Resolve("mscorlib");
+        var msCoreLibDefinition = assemblyResolver.Resolve(new AssemblyNameReference("mscorlib", null));
         var msCoreTypes = msCoreLibDefinition.MainModule.Types;
 
         var objectDefinition = msCoreTypes.FirstOrDefault(x => x.Name == "Object");
@@ -53,7 +53,7 @@ public class MsCoreReferenceFinder
 
     public void ExecuteWinRT()
     {
-        var systemRuntime = assemblyResolver.Resolve("System.Runtime");
+        var systemRuntime = assemblyResolver.Resolve(new AssemblyNameReference("System.Runtime", null));
         var systemRuntimeTypes = systemRuntime.MainModule.Types;
 
         var module = moduleWeaver.ModuleDefinition;
@@ -61,14 +61,14 @@ public class MsCoreReferenceFinder
         var compilerGeneratedDefinition = systemRuntimeTypes.First(x => x.Name == "CompilerGeneratedAttribute");
         CompilerGeneratedReference = module.ImportReference(compilerGeneratedDefinition.Methods.First(x => x.IsConstructor));
 
-        var systemReflection = assemblyResolver.Resolve("System.Reflection");
+        var systemReflection = assemblyResolver.Resolve(new AssemblyNameReference("System.Reflection", null));
         var methodBaseDefinition = systemReflection.MainModule.Types.First(x => x.Name == "MethodBase");
         GetMethodFromHandle = module.ImportReference(methodBaseDefinition.Methods.First(x => x.Name == "GetMethodFromHandle"));
 
         var methodInfo = systemReflection.MainModule.Types.FirstOrDefault(x => x.Name == "MethodInfo");
         MethodInfoTypeReference = module.ImportReference(methodInfo);
 
-        var systemLinqExpressions = assemblyResolver.Resolve("System.Linq.Expressions");
+        var systemLinqExpressions = assemblyResolver.Resolve(new AssemblyNameReference("System.Linq.Expressions", null));
         var expressionTypeDefinition = systemLinqExpressions.MainModule.Types.First(x => x.Name == "Expression");
         var propertyMethodDefinition = expressionTypeDefinition.Methods.First(x => x.Name == "Property" && x.Parameters.Last().ParameterType.Name == "MethodInfo");
         PropertyReference = module.ImportReference(propertyMethodDefinition);
@@ -79,7 +79,7 @@ public class MsCoreReferenceFinder
     {
         try
         {
-            return assemblyResolver.Resolve("System.Core");
+            return assemblyResolver.Resolve(new AssemblyNameReference("System.Core", null));
         }
         catch (FileNotFoundException)
         {
