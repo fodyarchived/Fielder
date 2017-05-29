@@ -6,6 +6,8 @@ Converts public fields to public properties
 
 [Introduction to Fody](http://github.com/Fody/Fody/wiki/SampleUsage)
 
+[![NuGet Status](https://img.shields.io/gitter/room/fody/fody.svg?style=flat)](https://gitter.im/Fody/Fody)
+
 This feature means you can exclude the `{ get; set; }` on your properties and use fields instead.
 
 ## The nuget package  [![NuGet Status](http://img.shields.io/nuget/v/Fielder.Fody.svg?style=flat)](https://www.nuget.org/packages/Fielder.Fody/)
