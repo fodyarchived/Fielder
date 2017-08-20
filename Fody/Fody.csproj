@@ -9,9 +9,10 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="FodyCecil" Version="2.*" />
+    <PackageReference Include="PepitaPackage" Version="1.*" />
     <Compile Include="..\CommonAssemblyInfo.cs" />
   </ItemGroup>
-  <Target Name="AfterBuild">
+  <Target Name="BuildNugets" AfterTargets="CopyFilesToOutputDirectory">
     <ItemGroup>
       <FilesToDelete Include="$(SolutionDir)NuGetBuild\**\*.*" />
     </ItemGroup>
