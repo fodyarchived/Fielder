@@ -1,3 +1,4 @@
+// ReSharper disable UnusedMember.Local
 class ClassUsingRefParam
 {
     void Method()

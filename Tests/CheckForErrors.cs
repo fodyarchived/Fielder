@@ -10,7 +10,8 @@ public class CheckForErrors
     public void VerifyRefError()
     {
         var errors = new List<string>();
-        var assemblyPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\AssemblyToProcessWithErrors\bin\Debug\AssemblyToProcessWithErrors.dll"));
+        var path = Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\..\AssemblyToProcessWithErrors\bin\Debug\net462\AssemblyToProcessWithErrors.dll");
+        var assemblyPath = Path.GetFullPath(path);
 #if (!DEBUG)
         assemblyPath = assemblyPath.Replace("Debug", "Release");
 #endif

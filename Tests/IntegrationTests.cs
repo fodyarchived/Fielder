@@ -14,9 +14,9 @@ public class IntegrationTests
 
     public IntegrationTests()
     {
-        beforeAssemblyPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll"));
+        var path = Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\..\AssemblyToProcess\bin\Debug\net462\AssemblyToProcess.dll");
+        beforeAssemblyPath = Path.GetFullPath(path);
 #if (!DEBUG)
-
         beforeAssemblyPath = beforeAssemblyPath.Replace("Debug", "Release");
 #endif
 
@@ -96,7 +96,6 @@ public class IntegrationTests
         var fieldInfo = type.GetField("Member");
         Assert.IsNotNull(fieldInfo);
         Assert.AreEqual("InitialValue", fieldInfo.GetValue(null));
-
     }
 
     [Test]

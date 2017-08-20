@@ -1,3 +1,4 @@
+// ReSharper disable UnusedMember.Local
 class ClassUsingOutParam
 {
     void Method()
