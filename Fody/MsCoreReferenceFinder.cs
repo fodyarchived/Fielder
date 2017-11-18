@@ -24,11 +24,11 @@ public class MsCoreReferenceFinder
     {
         try
         {
-            var msCoreLibDefinition = assemblyResolver.Resolve(new AssemblyNameReference(name, null));
+            var assembly = assemblyResolver.Resolve(new AssemblyNameReference(name, null));
 
-            if (msCoreLibDefinition != null)
+            if (assembly != null)
             {
-                types.AddRange(msCoreLibDefinition.MainModule.Types);
+                types.AddRange(assembly.MainModule.Types);
             }
         }
         catch (AssemblyResolutionException)

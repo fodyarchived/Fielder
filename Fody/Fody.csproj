@@ -19,8 +19,8 @@
     <Delete Files="@(FilesToDelete)" />
     <MakeDir Directories="$(SolutionDir)NuGetBuild" />
     <Copy SourceFiles="$(ProjectDir)Fielder.Fody.nuspec" DestinationFolder="$(SolutionDir)NuGetBuild" />
-    <Copy SourceFiles="$(OutputPath)Fielder.Fody.dll" DestinationFolder="$(SolutionDir)NuGetBuild" />
-    <Copy SourceFiles="$(OutputPath)Fielder.Fody.pdb" DestinationFolder="$(SolutionDir)NuGetBuild" />
-    <PepitaPackage.CreatePackageTask NuGetBuildDirectory="$(SolutionDir)NuGetBuild" MetadataAssembly="$(OutputPath)Fielder.Fody.dll" />
+    <Copy SourceFiles="$(ProjectDir)bin\$(ConfigurationName)\net452\Fielder.Fody.dll" DestinationFolder="$(SolutionDir)NuGetBuild" />
+    <Copy SourceFiles="$(ProjectDir)bin\$(ConfigurationName)\net452\Fielder.Fody.pdb" DestinationFolder="$(SolutionDir)NuGetBuild" />
+    <PepitaPackage.CreatePackageTask NuGetBuildDirectory="$(SolutionDir)NuGetBuild" MetadataAssembly="$(ProjectDir)bin\$(ConfigurationName)\net452\Fielder.Fody.dll" />
   </Target>
 </Project>
