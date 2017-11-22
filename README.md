@@ -1,6 +1,6 @@
 [![Chat on Gitter](https://img.shields.io/gitter/room/fody/fody.svg?style=flat)](https://gitter.im/Fody/Fody)
 [![NuGet Status](http://img.shields.io/nuget/v/Fielder.Fody.svg?style=flat)](https://www.nuget.org/packages/Fielder.Fody/)
-  
+
 
 ## This is an add-in for [Fody](https://github.com/Fody/Fody/) 
 
@@ -13,11 +13,34 @@ Converts public fields to public properties
 This feature means you can exclude the `{ get; set; }` on your properties and use fields instead.
 
 
-## The nuget package
+## Usage
 
-https://nuget.org/packages/Fielder.Fody/
+See also [Fody usage](https://github.com/Fody/Fody#usage).
 
-    PM> Install-Package Fielder.Fody
+
+### NuGet installation
+
+Install the [Fielder.Fody NuGet package](https://nuget.org/packages/Fielder.Fody/) and update the [Fody NuGet package](https://nuget.org/packages/Fody/):
+
+```
+PM> Install-Package Fielder.Fody
+PM> Update-Package Fody
+```
+
+The `Update-Package Fody` is required since NuGet always defaults to the oldest, and most buggy, version of any dependency.
+
+
+### Add to FodyWeavers.xml
+
+Add `<Fielder/>` to [FodyWeavers.xml](https://github.com/Fody/Fody#add-fodyweaversxml)
+
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<Weavers>
+  <Fielder/>
+</Weavers>
+```
+
 
 
 ## How does this work. 
