@@ -7,6 +7,7 @@ public class ClassWithFieldInherit : ClassWithField
         Member = "Foo";
         Debug.WriteLine(Member);
     }
+
     public void Method2()
     {
         Member = "Foo";

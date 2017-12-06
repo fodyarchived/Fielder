@@ -29,6 +29,7 @@ public class MsCoreReferenceFinder
             if (assembly != null)
             {
                 types.AddRange(assembly.MainModule.Types);
+                types.AddRange(assembly.MainModule.ExportedTypes.Select(x=>x.Resolve()));
             }
         }
         catch (AssemblyResolutionException)
@@ -39,7 +40,6 @@ public class MsCoreReferenceFinder
 
     public void Execute()
     {
-
         var types = new List<TypeDefinition>();
 
         AddAssemblyIfExists("mscorlib", types);
@@ -66,5 +66,4 @@ public class MsCoreReferenceFinder
                 x => x.Name == "Property" && x.Parameters.Last().ParameterType.Name == "MethodInfo");
         PropertyReference = module.ImportReference(propertyMethodDefinition);
     }
-
 }

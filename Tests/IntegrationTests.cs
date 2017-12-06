@@ -14,11 +14,8 @@ public class IntegrationTests
 
     public IntegrationTests()
     {
-        var path = Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\..\AssemblyToProcess\bin\Debug\net462\AssemblyToProcess.dll");
+        var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "AssemblyToProcess.dll");
         beforeAssemblyPath = Path.GetFullPath(path);
-#if (!DEBUG)
-        beforeAssemblyPath = beforeAssemblyPath.Replace("Debug", "Release");
-#endif
 
         afterAssemblyPath = beforeAssemblyPath.Replace(".dll", "2.dll");
         File.Copy(beforeAssemblyPath, afterAssemblyPath, true);
@@ -105,15 +102,9 @@ public class IntegrationTests
         Assert.IsNotNull(type.GetField("Member"));
     }
 
-
-#if(DEBUG)
-
     [Test]
     public void PeVerify()
     {
         Verifier.Verify(beforeAssemblyPath, afterAssemblyPath);
     }
-
-#endif
-
 }

@@ -2,10 +2,8 @@ using System.Collections.Generic;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 
-
 public class FieldToPropertyConverter
 {
-
     MsCoreReferenceFinder msCoreReferenceFinder;
     TypeSystem typeSystem;
     List<TypeDefinition> allTypes;
@@ -16,7 +14,7 @@ public class FieldToPropertyConverter
     ModuleWeaver moduleWeaver;
 
     public FieldToPropertyConverter(ModuleWeaver moduleWeaver, MsCoreReferenceFinder msCoreReferenceFinder,
-                                    TypeSystem typeSystem, List<TypeDefinition> allTypes)
+        TypeSystem typeSystem, List<TypeDefinition> allTypes)
     {
         this.moduleWeaver = moduleWeaver;
         this.msCoreReferenceFinder = msCoreReferenceFinder;
@@ -39,6 +37,7 @@ public class FieldToPropertyConverter
         {
             return;
         }
+
         if (typeDefinition.HasGenericParameters)
         {
             var message =
@@ -54,17 +53,14 @@ public class FieldToPropertyConverter
         typeDefinition.Methods.Add(get);
 
         var propertyDefinition = new PropertyDefinition(name, PropertyAttributes.None, field.FieldType)
-            {
-                GetMethod = get
-            };
+            {GetMethod = get};
         var forwardedField = new ForwardedField
-            {
-                Get = get,
-                FieldType = field.FieldType,
-                DeclaringType = field.DeclaringType,
-                PropertyDefinition = propertyDefinition,
-            };
-
+        {
+            Get = get,
+            FieldType = field.FieldType,
+            DeclaringType = field.DeclaringType,
+            PropertyDefinition = propertyDefinition,
+        };
 
         var isReadOnly = field.Attributes.HasFlag(FieldAttributes.InitOnly);
         if (!isReadOnly)
@@ -74,11 +70,13 @@ public class FieldToPropertyConverter
             typeDefinition.Methods.Add(set);
             propertyDefinition.SetMethod = set;
         }
+
         forwardedField.IsReadOnly = isReadOnly;
         foreach (var customAttribute in field.CustomAttributes)
         {
             propertyDefinition.CustomAttributes.Add(customAttribute);
         }
+
         field.CustomAttributes.Add(new CustomAttribute(msCoreReferenceFinder.CompilerGeneratedReference));
         typeDefinition.Properties.Add(propertyDefinition);
 
@@ -88,8 +86,8 @@ public class FieldToPropertyConverter
     MethodDefinition GetGet(FieldDefinition field, string name)
     {
         var get = new MethodDefinition("get_" + name,
-                                       MethodAttributes.Public | MethodAttributes.SpecialName |
-                                       MethodAttributes.HideBySig, field.FieldType);
+            MethodAttributes.Public | MethodAttributes.SpecialName |
+            MethodAttributes.HideBySig, field.FieldType);
         var instructions = get.Body.Instructions;
         instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
         instructions.Add(Instruction.Create(OpCodes.Ldfld, field));
@@ -108,8 +106,8 @@ public class FieldToPropertyConverter
     MethodDefinition GetSet(FieldDefinition field, string name)
     {
         var set = new MethodDefinition("set_" + name,
-                                       MethodAttributes.Public | MethodAttributes.SpecialName |
-                                       MethodAttributes.HideBySig, typeSystem.Void);
+            MethodAttributes.Public | MethodAttributes.SpecialName |
+            MethodAttributes.HideBySig, typeSystem.Void);
         var instructions = set.Body.Instructions;
         instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
         instructions.Add(Instruction.Create(OpCodes.Ldarg_1));
@@ -129,14 +127,17 @@ public class FieldToPropertyConverter
             {
                 continue;
             }
+
             if (type.IsValueType)
             {
                 continue;
             }
+
             if (type.IsEnum)
             {
                 continue;
             }
+
             Process(type);
         }
     }

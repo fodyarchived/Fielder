@@ -2,9 +2,9 @@
 [![NuGet Status](http://img.shields.io/nuget/v/Fielder.Fody.svg?style=flat)](https://www.nuget.org/packages/Fielder.Fody/)
 
 
-## This is an add-in for [Fody](https://github.com/Fody/Fody/) 
+## This is an add-in for [Fody](https://github.com/Fody/Fody/)
 
-![Icon](https://raw.github.com/Fody/Fielder/master/Icons/package_icon.png)
+![Icon](https://raw.github.com/Fody/Fielder/master/package_icon.png)
 
 Converts public fields to public properties
 
@@ -42,8 +42,7 @@ Add `<Fielder/>` to [FodyWeavers.xml](https://github.com/Fody/Fody#add-fodyweave
 ```
 
 
-
-## How does this work. 
+## How does this work
 
  * For all types find all public instance fields with a capitalised first character
  * Convert all those fields to properties with the same name

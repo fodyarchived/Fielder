@@ -1,4 +1,4 @@
-public struct StructWithFields 
+public struct StructWithFields
 {
     public string Member;
 }

@@ -14,6 +14,7 @@ public class ClassWithNullable
         Member = 10;
         Debug.WriteLine(Member);
     }
+
     public static int StaticMethod()
     {
         var classWithNullable = new ClassWithNullable();
