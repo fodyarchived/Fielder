@@ -26,11 +26,18 @@ public class MsCoreReferenceFinder
         {
             var assembly = assemblyResolver.Resolve(new AssemblyNameReference(name, null));
 
-            if (assembly != null)
+            if (assembly == null)
             {
-                types.AddRange(assembly.MainModule.Types);
-                types.AddRange(assembly.MainModule.ExportedTypes.Select(x=>x.Resolve()));
+                return;
             }
+
+            var module = assembly.MainModule;
+            types.AddRange(module.Types.Where(x => x.IsPublic));
+            var exported = module.ExportedTypes
+                .Where(x => x.IsPublic)
+                .Select(x => x.Resolve())
+                .Where(x => x != null);
+            types.AddRange(exported);
         }
         catch (AssemblyResolutionException)
         {
@@ -52,13 +59,15 @@ public class MsCoreReferenceFinder
         var module = moduleWeaver.ModuleDefinition;
 
         var methodBaseDefinition = types.First(x => x.Name == "MethodBase");
-        GetMethodFromHandle = module.ImportReference(methodBaseDefinition.Methods.First(x => x.Name == "GetMethodFromHandle"));
+        var getMethodFromHandle = methodBaseDefinition.Methods.First(x => x.Name == "GetMethodFromHandle");
+        GetMethodFromHandle = module.ImportReference(getMethodFromHandle);
 
         var methodInfo = types.First(x => x.Name == "MethodInfo");
         MethodInfoTypeReference = module.ImportReference(methodInfo);
 
         var compilerGeneratedDefinition = types.First(x => x.Name == "CompilerGeneratedAttribute");
-        CompilerGeneratedReference = module.ImportReference(compilerGeneratedDefinition.Methods.First(x => x.IsConstructor));
+        var compilerGenerated = compilerGeneratedDefinition.Methods.First(x => x.IsConstructor);
+        CompilerGeneratedReference = module.ImportReference(compilerGenerated);
 
         var expressionTypeDefinition = types.First(x => x.Name == "Expression");
         var propertyMethodDefinition =
