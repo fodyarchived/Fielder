@@ -35,7 +35,7 @@ public class MsCoreReferenceFinder
             types.AddRange(module.Types.Where(x => x.IsPublic));
             var exported = module.ExportedTypes
                 .Select(x => x.Resolve())
-                .Where(x => x.IsPublic);
+                .Where(x => x != null && x.IsPublic);
             types.AddRange(exported);
         }
         catch (AssemblyResolutionException)
