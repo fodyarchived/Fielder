@@ -20,15 +20,25 @@ public class IntegrationTests
         afterAssemblyPath = beforeAssemblyPath.Replace(".dll", "2.dll");
         File.Copy(beforeAssemblyPath, afterAssemblyPath, true);
 
-        using (var moduleDefinition = ModuleDefinition.ReadModule(beforeAssemblyPath))
+        using (var assemblyResolver = new DefaultAssemblyResolver())
         {
-            var weavingTask = new ModuleWeaver
+            var readerParameters = new ReaderParameters
             {
-                ModuleDefinition = moduleDefinition,
+                AssemblyResolver = assemblyResolver
             };
+#if NETCOREAPP2_0
+            var directory = Assembly.Load("netstandard").Location;
+            assemblyResolver.AddSearchDirectory(directory);
+#endif
 
-            weavingTask.Execute();
-            moduleDefinition.Write(afterAssemblyPath);
+            using (var moduleDefinition = ModuleDefinition.ReadModule(beforeAssemblyPath, readerParameters))
+            {
+                var weavingTask = new ModuleWeaver
+                    {ModuleDefinition = moduleDefinition,};
+
+                weavingTask.Execute();
+                moduleDefinition.Write(afterAssemblyPath);
+            }
         }
 
         assembly = Assembly.LoadFile(afterAssemblyPath);
