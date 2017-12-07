@@ -2,4 +2,4 @@
 
 [assembly: AssemblyTitle("Fielder")]
 [assembly: AssemblyProduct("Fielder")]
-[assembly: AssemblyVersion("1.1.4")]
+[assembly: AssemblyVersion("1.1.5")]
