@@ -54,7 +54,8 @@ public class FieldToPropertyForwarder
                 continue;
             }
             if (instruction.OpCode == OpCodes.Ldfld)
-            {                if (forwardedFields.TryGetValue(fieldDefinition, out var forwardedField))
+            {
+                if (forwardedFields.TryGetValue(fieldDefinition, out var forwardedField))
                 {
                     instruction.OpCode = OpCodes.Callvirt;
                     instruction.Operand = forwardedField.Get;
@@ -62,7 +63,8 @@ public class FieldToPropertyForwarder
                 continue;
             }
             if (instruction.OpCode == OpCodes.Ldflda)
-            {                if (forwardedFields.TryGetValue(fieldDefinition, out var forwardedField))
+            {
+                if (forwardedFields.TryGetValue(fieldDefinition, out var forwardedField))
                 {
                     if (instruction.Next.IsRefOrOut())
                     {
@@ -95,7 +97,8 @@ public class FieldToPropertyForwarder
             }
 
             if (instruction.OpCode == OpCodes.Stfld)
-            {                if (forwardedFields.TryGetValue(fieldDefinition, out var forwardedField))
+            {
+                if (forwardedFields.TryGetValue(fieldDefinition, out var forwardedField))
                 {
                     if (forwardedField.IsReadOnly)
                     {
@@ -119,7 +122,8 @@ public class FieldToPropertyForwarder
     }
 
     Action<Collection<Instruction>> ProcessLdToken(Instruction instruction, FieldDefinition fieldDefinition)
-    {        if (!forwardedFields.TryGetValue(fieldDefinition, out var forwardedField))
+    {
+        if (!forwardedFields.TryGetValue(fieldDefinition, out var forwardedField))
         {
             return collection => { };
         }
@@ -135,7 +139,17 @@ public class FieldToPropertyForwarder
         {
             return collection => { };
         }
-        if (next.OpCode != OpCodes.Call || nextNext.OpCode != OpCodes.Call)        {            return collection => { };        }        if (!(next.Operand is MethodReference nextMethod))        {            return collection => { };        }        if (!(nextNext.Operand is MethodReference nextNextMethod))
+        if (next.OpCode != OpCodes.Call || nextNext.OpCode != OpCodes.Call)
+        {
+            return collection => { };
+        }
+
+        if (!(next.Operand is MethodReference nextMethod))
+        {
+            return collection => { };
+        }
+
+        if (!(nextNext.Operand is MethodReference nextNextMethod))
         {
             return collection => { };
         }
@@ -147,7 +161,15 @@ public class FieldToPropertyForwarder
         {
             return collection => { };
         }
-        next.Operand = msCoreReferenceFinder.GetMethodFromHandle;        void LdToken(Collection<Instruction> collection)        {            var indexOf = collection.IndexOf(nextNext);            collection.Insert(indexOf, Instruction.Create(OpCodes.Castclass, msCoreReferenceFinder.MethodInfoTypeReference));        }        //nextNext.Next
+        next.Operand = msCoreReferenceFinder.GetMethodFromHandle;
+
+        void LdToken(Collection<Instruction> collection)
+        {
+            var indexOf = collection.IndexOf(nextNext);
+            collection.Insert(indexOf, Instruction.Create(OpCodes.Castclass, msCoreReferenceFinder.MethodInfoTypeReference));
+        }
+
+        //nextNext.Next
         nextNext.Operand = msCoreReferenceFinder.PropertyReference;
         return LdToken;
     }

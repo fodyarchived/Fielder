@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.8
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fielder.Fody", "Fielder.Fody\Fielder.Fody.csproj", "{C3578A7B-09A6-4444-9383-0DEAFA4958BD}"
 EndProject
@@ -14,6 +14,13 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyToProcess", "AssemblyToProcess\AssemblyToProcess.csproj", "{7DEC4E2D-F872-434E-A267-0BAD65299950}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyToProcessWithErrors", "AssemblyToProcessWithErrors\AssemblyToProcessWithErrors.csproj", "{46F580AD-7405-45F0-9360-3319C1B07636}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6701C411-2C8D-4EE9-86F3-390F1B0F96F3}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fielder", "Fielder\Fielder.csproj", "{3C9313C9-2FEC-4642-88B0-4F4428CD3EDE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,6 +72,18 @@ Global
 		{46F580AD-7405-45F0-9360-3319C1B07636}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{46F580AD-7405-45F0-9360-3319C1B07636}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{46F580AD-7405-45F0-9360-3319C1B07636}.Release|x86.ActiveCfg = Release|Any CPU
+		{3C9313C9-2FEC-4642-88B0-4F4428CD3EDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C9313C9-2FEC-4642-88B0-4F4428CD3EDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C9313C9-2FEC-4642-88B0-4F4428CD3EDE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3C9313C9-2FEC-4642-88B0-4F4428CD3EDE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3C9313C9-2FEC-4642-88B0-4F4428CD3EDE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3C9313C9-2FEC-4642-88B0-4F4428CD3EDE}.Debug|x86.Build.0 = Debug|Any CPU
+		{3C9313C9-2FEC-4642-88B0-4F4428CD3EDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C9313C9-2FEC-4642-88B0-4F4428CD3EDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C9313C9-2FEC-4642-88B0-4F4428CD3EDE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3C9313C9-2FEC-4642-88B0-4F4428CD3EDE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3C9313C9-2FEC-4642-88B0-4F4428CD3EDE}.Release|x86.ActiveCfg = Release|Any CPU
+		{3C9313C9-2FEC-4642-88B0-4F4428CD3EDE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

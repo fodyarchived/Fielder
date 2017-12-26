@@ -5,10 +5,9 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FodyCecil" Version="2.*" />
-    <PackageReference Include="NUnit" Version="3.*" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.*" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.*" />
+    <PackageReference Include="FodyHelpers" Version="2.3.6" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
     <ProjectReference Include="..\AssemblyToProcessWithErrors\AssemblyToProcessWithErrors.csproj" />
     <ProjectReference Include="..\AssemblyToProcess\AssemblyToProcess.csproj" />
     <ProjectReference Include="..\Fielder.Fody\Fielder.Fody.csproj" />
