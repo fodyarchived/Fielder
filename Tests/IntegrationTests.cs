@@ -7,14 +7,10 @@ using Xunit;
 
 public class IntegrationTests
 {
-    TestResult testResult;
+    static TestResult testResult;
 
-    public IntegrationTests()
+    static IntegrationTests()
     {
-//#if NETCOREAPP2_0
-//            var directory = Assembly.Load("netstandard").Location;
-//            assemblyResolver.AddSearchDirectory(directory);
-//#endif
         var weavingTask = new ModuleWeaver();
         testResult = weavingTask.ExecuteTestRun("AssemblyToProcess.dll");
     }

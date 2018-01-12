@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Mono.Cecil;
 
-public class MsCoreReferenceFinder
+public class ReferenceFinder
 {
     ModuleDefinition module;
     Func<string, TypeDefinition> findType;
@@ -11,7 +11,7 @@ public class MsCoreReferenceFinder
     public MethodReference PropertyReference;
     public MethodReference CompilerGeneratedReference;
 
-    public MsCoreReferenceFinder(ModuleDefinition module, Func<string, TypeDefinition> findType)
+    public ReferenceFinder(ModuleDefinition module, Func<string, TypeDefinition> findType)
     {
         this.module = module;
         this.findType = findType;
@@ -29,7 +29,7 @@ public class MsCoreReferenceFinder
         var compilerGeneratedDefinition = findType("System.Runtime.CompilerServices.CompilerGeneratedAttribute");
         var compilerGenerated = compilerGeneratedDefinition.Methods.First(x => x.IsConstructor);
         CompilerGeneratedReference = module.ImportReference(compilerGenerated);
-        
+
         var expressionTypeDefinition = findType("System.Linq.Expressions.Expression");
         var propertyMethodDefinition =
             expressionTypeDefinition.Methods.First(

@@ -4,20 +4,18 @@ using Mono.Cecil.Cil;
 
 public class FieldToPropertyConverter
 {
-    MsCoreReferenceFinder msCoreReferenceFinder;
+    ReferenceFinder referenceFinder;
     TypeSystem typeSystem;
     List<TypeDefinition> allTypes;
 
-    public Dictionary<FieldDefinition, ForwardedField> ForwardedFields =
-        new Dictionary<FieldDefinition, ForwardedField>();
+    public Dictionary<FieldDefinition, ForwardedField> ForwardedFields = new Dictionary<FieldDefinition, ForwardedField>();
 
     ModuleWeaver moduleWeaver;
 
-    public FieldToPropertyConverter(ModuleWeaver moduleWeaver, MsCoreReferenceFinder msCoreReferenceFinder,
-        TypeSystem typeSystem, List<TypeDefinition> allTypes)
+    public FieldToPropertyConverter(ModuleWeaver moduleWeaver, ReferenceFinder referenceFinder, TypeSystem typeSystem, List<TypeDefinition> allTypes)
     {
         this.moduleWeaver = moduleWeaver;
-        this.msCoreReferenceFinder = msCoreReferenceFinder;
+        this.referenceFinder = referenceFinder;
         this.typeSystem = typeSystem;
         this.allTypes = allTypes;
     }
@@ -77,7 +75,7 @@ public class FieldToPropertyConverter
             propertyDefinition.CustomAttributes.Add(customAttribute);
         }
 
-        field.CustomAttributes.Add(new CustomAttribute(msCoreReferenceFinder.CompilerGeneratedReference));
+        field.CustomAttributes.Add(new CustomAttribute(referenceFinder.CompilerGeneratedReference));
         typeDefinition.Properties.Add(propertyDefinition);
 
         ForwardedFields.Add(field, forwardedField);
@@ -99,7 +97,7 @@ public class FieldToPropertyConverter
         get.Body.Variables.Add(new VariableDefinition(field.FieldType));
         get.Body.InitLocals = true;
         get.SemanticsAttributes = MethodSemanticsAttributes.Getter;
-        get.CustomAttributes.Add(new CustomAttribute(msCoreReferenceFinder.CompilerGeneratedReference));
+        get.CustomAttributes.Add(new CustomAttribute(referenceFinder.CompilerGeneratedReference));
         return get;
     }
 
@@ -115,7 +113,7 @@ public class FieldToPropertyConverter
         instructions.Add(Instruction.Create(OpCodes.Ret));
         set.Parameters.Add(new ParameterDefinition("value", ParameterAttributes.None, field.FieldType));
         set.SemanticsAttributes = MethodSemanticsAttributes.Setter;
-        set.CustomAttributes.Add(new CustomAttribute(msCoreReferenceFinder.CompilerGeneratedReference));
+        set.CustomAttributes.Add(new CustomAttribute(referenceFinder.CompilerGeneratedReference));
         return set;
     }
 

@@ -8,14 +8,14 @@ using Mono.Collections.Generic;
 public class FieldToPropertyForwarder
 {
     ModuleWeaver moduleWeaver;
-    MsCoreReferenceFinder msCoreReferenceFinder;
+    ReferenceFinder referenceFinder;
     MethodFinder methodFinder;
     Dictionary<FieldDefinition, ForwardedField> forwardedFields;
 
-    public FieldToPropertyForwarder(ModuleWeaver moduleWeaver, FieldToPropertyConverter fieldToPropertyConverter, MsCoreReferenceFinder msCoreReferenceFinder, MethodFinder methodFinder)
+    public FieldToPropertyForwarder(ModuleWeaver moduleWeaver, FieldToPropertyConverter fieldToPropertyConverter, ReferenceFinder referenceFinder, MethodFinder methodFinder)
     {
         this.moduleWeaver = moduleWeaver;
-        this.msCoreReferenceFinder = msCoreReferenceFinder;
+        this.referenceFinder = referenceFinder;
         this.methodFinder = methodFinder;
         forwardedFields = fieldToPropertyConverter.ForwardedFields;
     }
@@ -48,8 +48,7 @@ public class FieldToPropertyForwarder
         var instructions = method.Body.Instructions;
         foreach (var instruction in instructions)
         {
-            var fieldDefinition = instruction.Operand as FieldDefinition;
-            if (fieldDefinition == null)
+            if (!(instruction.Operand is FieldDefinition fieldDefinition))
             {
                 continue;
             }
@@ -161,16 +160,16 @@ public class FieldToPropertyForwarder
         {
             return collection => { };
         }
-        next.Operand = msCoreReferenceFinder.GetMethodFromHandle;
+        next.Operand = referenceFinder.GetMethodFromHandle;
 
         void LdToken(Collection<Instruction> collection)
         {
             var indexOf = collection.IndexOf(nextNext);
-            collection.Insert(indexOf, Instruction.Create(OpCodes.Castclass, msCoreReferenceFinder.MethodInfoTypeReference));
+            collection.Insert(indexOf, Instruction.Create(OpCodes.Castclass, referenceFinder.MethodInfoTypeReference));
         }
 
         //nextNext.Next
-        nextNext.Operand = msCoreReferenceFinder.PropertyReference;
+        nextNext.Operand = referenceFinder.PropertyReference;
         return LdToken;
     }
 }
