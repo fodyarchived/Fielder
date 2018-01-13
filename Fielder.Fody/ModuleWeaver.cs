@@ -27,4 +27,6 @@ public class ModuleWeaver:BaseModuleWeaver
         yield return "System.Linq.Expressions";
         yield return "netstandard";
     }
+
+    public override bool ShouldCleanReference => true;
 }

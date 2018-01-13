@@ -18,7 +18,7 @@ public class IntegrationTests
     [Fact]
     public void ClassWithField()
     {
-        var instance = testResult.Assembly.GetInstance("ClassWithField");
+        var instance = testResult.GetInstance("ClassWithField");
 
         Type type = instance.GetType();
         Assert.NotNull(type.GetProperty("Member"));
@@ -36,7 +36,7 @@ public class IntegrationTests
     [Fact]
     public void ClassWithFieldInherit()
     {
-        var instance = testResult.Assembly.GetInstance("ClassWithFieldInherit");
+        var instance = testResult.GetInstance("ClassWithFieldInherit");
 
         Type type = instance.GetType();
         Assert.NotNull(type.GetProperty("Member"));
@@ -46,7 +46,7 @@ public class IntegrationTests
     [Fact]
     public void ClassWithReadOnlyField()
     {
-        var instance = testResult.Assembly.GetInstance("ClassWithReadOnlyField");
+        var instance = testResult.GetInstance("ClassWithReadOnlyField");
 
         Type type = instance.GetType();
         Assert.NotNull(type.GetProperty("Member"));
@@ -56,7 +56,7 @@ public class IntegrationTests
     [Fact]
     public void ClassWithReadOnlyFieldInherit()
     {
-        var instance = testResult.Assembly.GetInstance("ClassWithReadOnlyFieldInherit");
+        var instance = testResult.GetInstance("ClassWithReadOnlyFieldInherit");
 
         Type type = instance.GetType();
         Assert.NotNull(type.GetProperty("Member"));
@@ -66,7 +66,7 @@ public class IntegrationTests
     [Fact]
     public void ClassWithConstField()
     {
-        var instance = testResult.Assembly.GetInstance("ClassWithConstField");
+        var instance = testResult.GetInstance("ClassWithConstField");
 
         Type type = instance.GetType();
         var fieldInfo = type.GetField("Member");
