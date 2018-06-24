@@ -12,7 +12,7 @@ public class ModuleWeaver:BaseModuleWeaver
 
         var finder = new MethodFinder(allTypes);
         finder.Execute();
-        var converter = new FieldToPropertyConverter(this, referenceFinder, ModuleDefinition.TypeSystem, allTypes);
+        var converter = new FieldToPropertyConverter(this, referenceFinder, TypeSystem, allTypes);
         converter.Execute();
         var forwarder = new FieldToPropertyForwarder(this, converter, referenceFinder, finder);
         forwarder.Execute();
@@ -20,12 +20,8 @@ public class ModuleWeaver:BaseModuleWeaver
 
     public override IEnumerable<string> GetAssembliesForScanning()
     {
-        yield return "mscorlib";
-        yield return "System.Core";
-        yield return "System.Runtime";
         yield return "System.Reflection";
         yield return "System.Linq.Expressions";
-        yield return "netstandard";
     }
 
     public override bool ShouldCleanReference => true;
