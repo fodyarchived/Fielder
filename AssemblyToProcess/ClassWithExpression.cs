@@ -7,11 +7,11 @@ public class ClassWithExpression
 
     public ClassWithExpression Execute()
     {
-        return Select(x => new ClassWithExpression { Member = "d"} );
+        return Select(()=> new ClassWithExpression { Member = "d"} );
     }
 
-    public ClassWithExpression Select(Expression<Func<ClassWithExpression, ClassWithExpression>> selector)
+    public ClassWithExpression Select(Expression<Func<ClassWithExpression>> selector)
     {
-        return selector.Compile()(this);
+        return selector.Compile()();
     }
 }
