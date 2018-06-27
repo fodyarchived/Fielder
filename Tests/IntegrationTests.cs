@@ -16,6 +16,13 @@ public class IntegrationTests
     }
 
     [Fact]
+    public void ClassWithExpression()
+    {
+        var instance = testResult.GetInstance("ClassWithExpression");
+        Assert.NotNull(instance.Execute());
+    }
+
+    [Fact]
     public void ClassWithField()
     {
         var instance = testResult.GetInstance("ClassWithField");
