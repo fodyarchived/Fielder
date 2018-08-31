@@ -12,7 +12,7 @@ public class ModuleWeaver:BaseModuleWeaver
 
         var finder = new MethodFinder(allTypes);
         finder.Execute();
-        var converter = new FieldToPropertyConverter(this, referenceFinder, TypeSystem, allTypes);
+        var converter = new FieldToPropertyConverter(this, referenceFinder, allTypes);
         converter.Execute();
         var forwarder = new FieldToPropertyForwarder(this, converter, referenceFinder, finder);
         forwarder.Execute();

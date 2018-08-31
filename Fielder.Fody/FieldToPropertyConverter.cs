@@ -1,23 +1,20 @@
 using System.Collections.Generic;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
-using TypeSystem = Fody.TypeSystem;
 
 public class FieldToPropertyConverter
 {
     ReferenceFinder referenceFinder;
-    TypeSystem typeSystem;
     List<TypeDefinition> allTypes;
 
     public Dictionary<FieldDefinition, ForwardedField> ForwardedFields = new Dictionary<FieldDefinition, ForwardedField>();
 
     ModuleWeaver moduleWeaver;
 
-    public FieldToPropertyConverter(ModuleWeaver moduleWeaver, ReferenceFinder referenceFinder, Fody.TypeSystem typeSystem, List<TypeDefinition> allTypes)
+    public FieldToPropertyConverter(ModuleWeaver moduleWeaver, ReferenceFinder referenceFinder, List<TypeDefinition> allTypes)
     {
         this.moduleWeaver = moduleWeaver;
         this.referenceFinder = referenceFinder;
-        this.typeSystem = typeSystem;
         this.allTypes = allTypes;
     }
 
@@ -106,7 +103,7 @@ public class FieldToPropertyConverter
     {
         var set = new MethodDefinition("set_" + name,
             MethodAttributes.Public | MethodAttributes.SpecialName |
-            MethodAttributes.HideBySig, typeSystem.VoidReference);
+            MethodAttributes.HideBySig, moduleWeaver.TypeSystem.VoidReference);
         var instructions = set.Body.Instructions;
         instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
         instructions.Add(Instruction.Create(OpCodes.Ldarg_1));
