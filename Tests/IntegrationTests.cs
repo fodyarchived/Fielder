@@ -14,6 +14,7 @@ public class IntegrationTests
         var weavingTask = new ModuleWeaver();
         testResult = weavingTask.ExecuteTestRun("AssemblyToProcess.dll");
     }
+#if DEBUG
 
     [Fact]
     public void ClassWithExpression()
@@ -21,6 +22,8 @@ public class IntegrationTests
         var instance = testResult.GetInstance("ClassWithExpression");
         Assert.NotNull(instance.Execute());
     }
+
+#endif
 
     [Fact]
     public void ClassWithField()

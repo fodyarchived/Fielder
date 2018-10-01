@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if DEBUG
+
+using System;
 using System.Linq.Expressions;
 
 public class ClassWithExpression
@@ -7,7 +9,7 @@ public class ClassWithExpression
 
     public ClassWithExpression Execute()
     {
-        return Select(()=> new ClassWithExpression { Member = "d"} );
+        return Select(() => new ClassWithExpression {Member = "d"});
     }
 
     public ClassWithExpression Select(Expression<Func<ClassWithExpression>> selector)
@@ -15,3 +17,5 @@ public class ClassWithExpression
         return selector.Compile()();
     }
 }
+
+#endif
