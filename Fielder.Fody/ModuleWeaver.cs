@@ -6,6 +6,7 @@ public class ModuleWeaver:BaseModuleWeaver
 {
     public override void Execute()
     {
+        base.LogWarning("Fielder.Fody is no longer maintained");
         var referenceFinder = new ReferenceFinder(ModuleDefinition, FindType);
         referenceFinder.Execute();
         var allTypes = ModuleDefinition.GetTypes().ToList();

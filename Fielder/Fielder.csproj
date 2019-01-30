@@ -5,7 +5,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
     <Authors>Simon Cropp</Authors>
-    <Description>Converts public fields to properties.</Description>
+    <Description>Abandoned: Converts public fields to properties.</Description>
     <PackageTags>Properties, Fields, ILWeaving, Fody, Cecil</PackageTags>
   </PropertyGroup>
   <ItemGroup>
